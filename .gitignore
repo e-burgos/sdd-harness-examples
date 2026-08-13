@@ -1,0 +1,11 @@
+# Build output inside the examples. scripts/generate.mjs prunes these already;
+# this is the net that keeps an accidental local build out of the repo.
+node_modules
+dist
+build
+target
+.nx
+.venv
+__pycache__
+.DS_Store
+*.log

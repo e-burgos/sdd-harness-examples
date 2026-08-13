@@ -1,0 +1,32 @@
+{
+  "name": "portal",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/portal/src",
+  "projectType": "application",
+  "tags": ["scope:web", "type:app"],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/portal"
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "options": {
+        "buildTarget": "portal:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --passWithNoTests --coverage.reportsDirectory=../../coverage/apps/portal",
+        "cwd": "apps/portal"
+      }
+    }
+  }
+}

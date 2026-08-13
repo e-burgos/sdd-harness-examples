@@ -1,0 +1,9 @@
+package com.example.ordersapi.product.domain.ports.out;
+
+import com.example.ordersapi.product.domain.exception.ProductException;
+import com.example.ordersapi.product.domain.models.Product;
+
+public interface GetProductProvider
+{
+    Product getProduct(Long id) throws ProductException;
+}

@@ -1,0 +1,86 @@
+name: Regenerate examples
+
+on:
+  schedule:
+    # Every 6h: picks up a new @e-burgos/sdd-harness release without needing a
+    # cross-repo token in the CLI repo. Use "Run workflow" to pull one sooner.
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to generate from (blank = npm latest)'
+        required: false
+      force:
+        description: 'Regenerate even if VERSION already matches'
+        type: boolean
+        default: false
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/generate.mjs'
+      - 'configs/**'
+      - '.github/workflows/regenerate.yml'
+
+concurrency:
+  group: regenerate
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Resolve target version
+        id: target
+        run: |
+          WANTED="${{ inputs.version }}"
+          if [ -z "$WANTED" ]; then
+            WANTED=$(npm view @e-burgos/sdd-harness version)
+          fi
+          CURRENT=$(cat VERSION 2>/dev/null | tr -d '[:space:]')
+          echo "version=$WANTED" >> "$GITHUB_OUTPUT"
+          echo "Published: $WANTED — committed: $CURRENT"
+          if [ "$WANTED" = "$CURRENT" ] && [ "${{ inputs.force }}" != "true" ] && [ "${{ github.event_name }}" != "push" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Examples already reflect $WANTED, nothing to do."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Regenerate
+        if: steps.target.outputs.changed == 'true'
+        run: node scripts/generate.mjs "${{ steps.target.outputs.version }}"
+
+      - name: Commit and push
+        if: steps.target.outputs.changed == 'true'
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo "::notice::Regenerated output is identical to what is committed."
+            exit 0
+          fi
+          git commit -m "chore: regenerate examples from @e-burgos/sdd-harness@${{ steps.target.outputs.version }}"
+          git push
