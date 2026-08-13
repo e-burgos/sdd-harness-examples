@@ -17,7 +17,11 @@
     "portal": "nx serve portal",
     "build:portal": "nx build portal",
     "test:portal": "nx test portal",
-    "lint:portal": "nx lint portal"
+    "lint:portal": "nx lint portal",
+    "orders-api": "nx serve orders-api",
+    "build:orders-api": "nx build orders-api",
+    "test:orders-api": "nx test orders-api",
+    "lint:orders-api": "nx lint orders-api"
   },
   "dependencies": {
     "react": "^19.0.0",

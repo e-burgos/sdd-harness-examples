@@ -1,0 +1,17 @@
+{
+  "$schema": "./schemas/global.schema.json",
+  "project": "legacy-shop",
+  "description": "Storefront API that adopted SDD without touching a line of its own code.",
+  "version": "0.1.0",
+  "completed_modules": [],
+  "in_progress_modules": [],
+  "pending_modules": [],
+  "monorepo": {
+    "tool": "none (standalone repo)",
+    "package_manager": "pnpm",
+    "apps": {
+      "legacy-shop": ". — app (standalone: código en la raíz del repo)"
+    },
+    "libs": {}
+  }
+}

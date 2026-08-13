@@ -3,21 +3,35 @@
 Real output of [`@e-burgos/sdd-harness`](https://github.com/e-burgos/sdd-harness), so you can
 read what the CLI generates before running it on your own machine.
 
-Every directory here was produced by `harness init` and committed untouched. Nothing is
-hand-written, nothing is trimmed for the demo: what you browse is what you get.
+Every directory here was produced by the CLI and committed untouched. Nothing is hand-written,
+nothing is trimmed for the demo: what you browse is what you get.
 
-> **Generated from `@e-burgos/sdd-harness@0.4.0`** — see [`VERSION`](VERSION).
+> Generated from the version in [`VERSION`](VERSION), always the latest published on npm.
 
-## The examples
+## The examples — one per mode
 
 | Directory | Mode | Command | What it shows |
 | --- | --- | --- | --- |
 | [`flexi-market/`](flexi-market) | Nx monorepo | `harness init` | Nx 23 + pnpm workspace with two apps — `portal` (React 19 + Vite) and `orders-api` (Spring Boot 3 hexagonal, Maven) — plus a `shared-types` lib, a Postgres service, and the full SDD system |
 | [`pulse-api/`](pulse-api) | Standalone | `harness init --standalone` | One Fastify API with its code at the repo root, no Nx, same SDD system |
+| [`legacy-shop/`](legacy-shop) | SDD harness | `harness configure sdd` | A project that **already existed** and adopted SDD without changing a line of its own code |
 
-Both carry the complete portable kit under `sdd/`: the 7 cycle agents, 16+ skills, the gates as
-slash commands under `prompts/`, strict JSON Schemas, the dependency-free docs viewer, and the
+All three carry the complete portable kit under `sdd/`: the 7 cycle agents, 18 skills, the gates
+as slash commands under `prompts/`, strict JSON Schemas, the dependency-free docs viewer, and the
 Hermes layer (`sdd/memory/`, `sdd/pricing.json`).
+
+### `legacy-shop` is the interesting one
+
+The other two are generated from nothing. This one is installed **on top of** an existing
+project, and the proof is in the repo: [`seeds/legacy-shop/`](seeds/legacy-shop) is the input.
+Diff it against the result and you see exactly what the command did — and did not do:
+
+- `src/` is byte-for-byte identical. The CLI never touches your code.
+- The project's own `AGENTS.md` was **absorbed** into
+  [`legacy-shop/sdd/dual-harness/AGENTS.md`](legacy-shop/sdd/dual-harness/AGENTS.md), not
+  overwritten, before the root file became a symlink. Its rules are still there.
+- `package.json` kept `start`, `test`, `lint` and version `2.7.3`; the `sdd:*` and `setup:agents`
+  scripts were merged in alongside them.
 
 ### Where to look first
 
@@ -42,7 +56,12 @@ non-interactive path instead — the same one meant for agents and CI:
 npx @e-burgos/sdd-harness init --config configs/nx.json
 ```
 
-The two config files under [`configs/`](configs) are the exact inputs used here.
+```bash
+npx @e-burgos/sdd-harness configure sdd --name legacy-shop --description "..."
+```
+
+The inputs used here are the config files under [`configs/`](configs) and the seed project under
+[`seeds/`](seeds) — nothing else.
 
 ## How this repo stays honest
 
@@ -56,16 +75,8 @@ build output, commit. That also makes it a smoke test — if a release cannot ge
 this repo goes red.
 
 **Send pull requests to [e-burgos/sdd-harness](https://github.com/e-burgos/sdd-harness), not
-here.** Anything committed to these directories is overwritten by the next release.
-
-## Known gaps
-
-- The third mode, `harness configure sdd` (installing SDD onto a project that already exists),
-  is not represented yet: it prompts for the project name and description with no flags to skip
-  them, so it cannot run unattended.
-- `orders-api` is added with `harness add app springboot` rather than through `configs/nx.json`,
-  because the config schema's app types stop at `fastify` — `springboot` and `hono` are reachable
-  from the wizard and from `add app`, but not from `init --config`.
+here.** Anything committed to the example directories is overwritten by the next release. The
+configs and seeds, on the other hand, are inputs — those you can edit.
 
 ## Links
 

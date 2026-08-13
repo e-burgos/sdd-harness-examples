@@ -1,0 +1,13 @@
+{
+  "name": "legacy-shop",
+  "version": "2.7.3",
+  "private": true,
+  "description": "A storefront API that existed long before SDD",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test",
+    "lint": "eslint src"
+  }
+}

@@ -18,19 +18,28 @@ import { resolve, join } from 'node:path';
 const PKG = '@e-burgos/sdd-harness';
 const REPO = resolve(import.meta.dirname, '..');
 
-/** Each example: the config it is generated from, and any follow-up commands. */
+/**
+ * One entry per mode of the CLI.
+ *
+ * `init` generates from scratch out of a config file. `configure` installs SDD onto a project
+ * that already exists, so it needs a seed to install onto — the seed lives in the repo so you
+ * can diff it against the generated result and see exactly what the command added.
+ */
 const EXAMPLES = [
+  { dir: 'flexi-market', kind: 'init', config: 'configs/nx.json' },
+  { dir: 'pulse-api', kind: 'init', config: 'configs/standalone.json' },
   {
-    dir: 'flexi-market',
-    config: 'configs/nx.json',
-    // springboot is reachable through `add app`, not through the config schema
-    // (its AppType union stops at fastify) — see the README's "Known gaps".
-    after: [['add', 'app', 'springboot', '--name', 'orders-api']],
-  },
-  {
-    dir: 'pulse-api',
-    config: 'configs/standalone.json',
-    after: [],
+    dir: 'legacy-shop',
+    kind: 'configure',
+    seed: 'seeds/legacy-shop',
+    args: [
+      'configure',
+      'sdd',
+      '--name',
+      'legacy-shop',
+      '--description',
+      'Storefront API that adopted SDD without touching a line of its own code.',
+    ],
   },
 ];
 
@@ -82,22 +91,31 @@ console.log(`\n=== Regenerating examples from ${spec} ===\n`);
 const work = mkdtempSync(join(tmpdir(), 'sdd-examples-'));
 
 for (const example of EXAMPLES) {
-  console.log(`\n--- ${example.dir} (${example.config}) ---\n`);
-  const config = join(REPO, example.config);
-  if (!existsSync(config)) throw new Error(`Missing config: ${example.config}`);
-  cpSync(config, join(work, 'harness.config.json'));
-
-  run('npx', ['--yes', spec, 'init', '--config', 'harness.config.json'], work);
+  const source = example.config ?? example.seed;
+  console.log(`\n--- ${example.dir} (${example.kind}: ${source}) ---\n`);
 
   const generated = join(work, example.dir);
-  if (!existsSync(generated) || !statSync(generated).isDirectory()) {
-    throw new Error(
-      `${spec} did not produce ${example.dir}/ — the "project.name" in ${example.config} must match the example directory.`,
-    );
-  }
 
-  for (const args of example.after) {
-    run('npx', ['--yes', spec, ...args], generated);
+  if (example.kind === 'init') {
+    const config = join(REPO, example.config);
+    if (!existsSync(config)) throw new Error(`Missing config: ${example.config}`);
+    cpSync(config, join(work, 'harness.config.json'));
+    run('npx', ['--yes', spec, 'init', '--config', 'harness.config.json'], work);
+    if (!existsSync(generated) || !statSync(generated).isDirectory()) {
+      throw new Error(
+        `${spec} did not produce ${example.dir}/ — the "project.name" in ${example.config} must match the example directory.`,
+      );
+    }
+  } else {
+    const seed = join(REPO, example.seed);
+    if (!existsSync(seed)) throw new Error(`Missing seed: ${example.seed}`);
+    // configure sdd runs *inside* an existing repo, so the seed is copied first
+    // and the command installs on top of it.
+    cpSync(seed, generated, { recursive: true });
+    run('npx', ['--yes', spec, ...example.args], generated);
+    if (!existsSync(join(generated, 'sdd', 'global.json'))) {
+      throw new Error(`${spec} did not install sdd/ into ${example.dir}/`);
+    }
   }
 
   prune(generated);

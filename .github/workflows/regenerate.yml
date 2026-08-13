@@ -20,6 +20,7 @@ on:
     paths:
       - 'scripts/generate.mjs'
       - 'configs/**'
+      - 'seeds/**'
       - '.github/workflows/regenerate.yml'
 
 concurrency:
