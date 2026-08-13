@@ -1,10 +1,10 @@
 {
-  "kit_version": "0.4.2",
+  "kit_version": "0.4.3",
   "installed_at": "2026-08-13",
   "files": {
     "HOW-TO-USE-SDD.md": "3ce479e62f78de01dea3bd3f0e81e22f263eeec3d187432394f8a30b3201d0b6",
     "INSTALL.md": "e5904e07bd6ac483d84552b19da3f765cb04edee90e7fe2d17e3287b54b9e981",
-    "README.md": "c6c664b38b88dd4505f17fa6db591c9abc76d2bc73b69d0b1ad07c6584bbb4db",
+    "README.md": "030084f67d297ddbc20e307e4e13f4c4855435a25c03ae2fcdcda21c79e66a09",
     "agents/sdd-architect.agent.md": "8fe8b48e1f21836782f56a6c25ad3c3370f6b4ed0606adda1ab279995739e330",
     "agents/sdd-functional.agent.md": "2a0d22da96cf2c645153dd635bd670f55ade78b5dac12bc35a4aced6ed013981",
     "agents/sdd-implementor-back.agent.md": "3838cb3c269f1037b68e55e7ae10b1cf03b08b48b2469132e1f75268637d10ae",
@@ -14,7 +14,7 @@
     "agents/sdd-reviewer.agent.md": "36ec9748b57eaedc5fff8f88f20a43a24555e164721a58c5810a36eee6af0077",
     "context/constitution.md": "fb92216c088ea1f18d9e30aeec010832760f48e60524ad804691a97e8934309c",
     "context/context_prompt.md": "448b1855da8eb7dc6be73d61a485686009c0e5ca543fc72f0a145513f56b7b7f",
-    "docs/app.js": "17ce341c265d9800234fb35a436c09273cba6ff3b77f24424efb8de535226837",
+    "docs/app.js": "ce8f472f46d5e235d7d364ba8fec943b89970a744f0b77a42ac81efb0bdd03c4",
     "docs/fonts/jetbrains-mono-italic-latin-ext.woff2": "31434d4924e83d1c6bf10136077f96d0c541226301ba98a583b14bded0576a75",
     "docs/fonts/jetbrains-mono-italic-latin.woff2": "00ba27973ba2965d3e7e03ee0f2c66491956cda2ecf8cc6066c969696577f47b",
     "docs/fonts/jetbrains-mono-latin-ext.woff2": "9c38cb2d0d2d93c1ee6e21fa78db76f13ea7e15e15cc64214c7ca89b6aaa35c4",
