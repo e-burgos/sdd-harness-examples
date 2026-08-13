@@ -68,6 +68,15 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
+      # `harness init` ends with `git init` + an initial commit, which aborts with
+      # "empty ident name" on a runner that has no identity — so this has to be
+      # global and set before generating, not just before our own commit.
+      - name: Configure git identity
+        run: |
+          git config --global user.name  'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --global init.defaultBranch main
+
       - name: Regenerate
         if: steps.target.outputs.changed == 'true'
         run: node scripts/generate.mjs "${{ steps.target.outputs.version }}"
@@ -75,8 +84,6 @@ jobs:
       - name: Commit and push
         if: steps.target.outputs.changed == 'true'
         run: |
-          git config user.name  'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add -A
           if git diff --cached --quiet; then
             echo "::notice::Regenerated output is identical to what is committed."
