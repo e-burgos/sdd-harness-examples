@@ -1,5 +1,5 @@
 {
-  "kit_version": "0.4.1",
+  "kit_version": "0.4.2",
   "installed_at": "2026-08-13",
   "files": {
     "HOW-TO-USE-SDD.md": "3ce479e62f78de01dea3bd3f0e81e22f263eeec3d187432394f8a30b3201d0b6",
@@ -14,7 +14,7 @@
     "agents/sdd-reviewer.agent.md": "36ec9748b57eaedc5fff8f88f20a43a24555e164721a58c5810a36eee6af0077",
     "context/constitution.md": "fb92216c088ea1f18d9e30aeec010832760f48e60524ad804691a97e8934309c",
     "context/context_prompt.md": "448b1855da8eb7dc6be73d61a485686009c0e5ca543fc72f0a145513f56b7b7f",
-    "docs/app.js": "e0538a53331ae94d667088b8a8989f845a1ab797a8ccbc476ed7171d043902bf",
+    "docs/app.js": "17ce341c265d9800234fb35a436c09273cba6ff3b77f24424efb8de535226837",
     "docs/fonts/jetbrains-mono-italic-latin-ext.woff2": "31434d4924e83d1c6bf10136077f96d0c541226301ba98a583b14bded0576a75",
     "docs/fonts/jetbrains-mono-italic-latin.woff2": "00ba27973ba2965d3e7e03ee0f2c66491956cda2ecf8cc6066c969696577f47b",
     "docs/fonts/jetbrains-mono-latin-ext.woff2": "9c38cb2d0d2d93c1ee6e21fa78db76f13ea7e15e15cc64214c7ca89b6aaa35c4",
@@ -23,7 +23,7 @@
     "docs/fonts/space-grotesk-latin.woff2": "a0d054c4af557de20afd6ca59f47ab353bcaec49c63ff04b6c9d39d0f8910557",
     "docs/index.html": "60e51b25466b033b45e3e8e5ed5ec18371cbb9829332204ba92b878315ee10b6",
     "docs/serve.mjs": "e7125335d16f718937a1373451d56384d591df019d23505f229c51242fecae7f",
-    "docs/styles.css": "0ffb125a2dda1570991bbcc88720c39f296cd2ccc99f10171c62433c3a3597e1",
+    "docs/styles.css": "d1d12424d2bc95b03576ad3c7f30bce97e044b59376be4e7c5913f571ddf30d0",
     "dual-harness/AGENTS.md": "946266fc94893a168a76bed0953484ad34ff9f1f0aa2263baca3d613c0645364",
     "dual-harness/CLAUDE.md": "7df096fb8f92af300953d54b04756e4b9dd1418afe387a54c39f28232eacb12f",
     "memory/lessons.md": "9c6d99707bcd7cbaf9f18c3f13379a8d867355d645b2f2f3f513d90004827221",
