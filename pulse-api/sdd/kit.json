@@ -1,5 +1,5 @@
 {
-  "kit_version": "0.4.4",
+  "kit_version": "0.5.0",
   "installed_at": "2026-08-14",
   "files": {
     "HOW-TO-USE-SDD.md": "3ce479e62f78de01dea3bd3f0e81e22f263eeec3d187432394f8a30b3201d0b6",
@@ -14,7 +14,7 @@
     "agents/sdd-reviewer.agent.md": "36ec9748b57eaedc5fff8f88f20a43a24555e164721a58c5810a36eee6af0077",
     "context/constitution.md": "fb92216c088ea1f18d9e30aeec010832760f48e60524ad804691a97e8934309c",
     "context/context_prompt.md": "448b1855da8eb7dc6be73d61a485686009c0e5ca543fc72f0a145513f56b7b7f",
-    "docs/app.js": "ce8f472f46d5e235d7d364ba8fec943b89970a744f0b77a42ac81efb0bdd03c4",
+    "docs/app.js": "6825486cc293a562ee0a74b6f97bf6caab83bb7274781e55502bb9fcb539f146",
     "docs/fonts/jetbrains-mono-italic-latin-ext.woff2": "31434d4924e83d1c6bf10136077f96d0c541226301ba98a583b14bded0576a75",
     "docs/fonts/jetbrains-mono-italic-latin.woff2": "00ba27973ba2965d3e7e03ee0f2c66491956cda2ecf8cc6066c969696577f47b",
     "docs/fonts/jetbrains-mono-latin-ext.woff2": "9c38cb2d0d2d93c1ee6e21fa78db76f13ea7e15e15cc64214c7ca89b6aaa35c4",
