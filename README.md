@@ -35,7 +35,7 @@ Diff it against the result and you see exactly what the command did — and did 
 
 ### Where to look first
 
-- **`sdd/README.md`** and **`sdd/HOW-TO-USE-SDD.md`** — the methodology as the user receives it.
+- **`sdd/documentation/`** — the methodology as the user receives it: INSTALL, HOW-TO and the full reference, in Spanish and English (`sdd/README.md` is the bilingual index).
 - **`sdd/global.json`** — the single source of the project name and its registered subprojects.
 - **`AGENTS.md` → `sdd/dual-harness/AGENTS.md`** — the dual harness. It is a symlink, and so are
   `CLAUDE.md`, `.claude/commands/` and everything under `.github/skills/`: one set of
