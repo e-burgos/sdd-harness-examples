@@ -1,6 +1,6 @@
 {
-  "kit_version": "0.9.1",
-  "installed_at": "2026-08-19",
+  "kit_version": "0.9.3",
+  "installed_at": "2026-08-20",
   "files": {
     "README.md": "2d8f71b319260460530f780059599f4fb736fb1c9e6bc9222219a48a502f917e",
     "agents/sdd-architect.agent.md": "d1585b23522a20832e934b5c3bf9d3dab03a9bdde497e8e203f8a11229d98c91",
@@ -58,7 +58,7 @@
     "scripts/rebuild-tasks-index.mjs": "6a3516f4561eab5f7641de64c1498a58b5a69e760ecc083b274cdd36c847451e",
     "scripts/setup-agents.ps1": "542fd4f536a4c7b6ceba3d6aed59ebf1da3ca995087ad9ed9323b32e65b386ad",
     "scripts/setup-agents.sh": "9584dbcb05d3da2d4ff064c4bddf74bc80d40b4e2d794280ae1993a506807176",
-    "scripts/validate-sdd.mjs": "b41e9e067861cacfc2c43a733647f239c0214aea7452e27d62ffab930aaaf649",
+    "scripts/validate-sdd.mjs": "fca5890265441f4ef63216f2dd896d3805f4fda6783b36fb75f6ad7ac4a709b1",
     "skills/generate-api-contract/SKILL.md": "1d11d4fdb6768c80f6aaa782f2b17d7b813ccce44a49ceb09aa24c3c33586d6b",
     "skills/generate-nestjs-module/SKILL.md": "16920b73b4970500ef58efb8e667e3b51ad7d0c22f83eac1781b06ffaa938f75",
     "skills/generate-prisma-schema/SKILL.md": "edbb2f31a0e3c16f9f10c380de8f7daf922dd4907832ec85071d635a90afcdb3",
