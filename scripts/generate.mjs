@@ -100,7 +100,9 @@ for (const example of EXAMPLES) {
     const config = join(REPO, example.config);
     if (!existsSync(config)) throw new Error(`Missing config: ${example.config}`);
     cpSync(config, join(work, 'harness.config.json'));
-    run('npx', ['--yes', spec, 'init', '--config', 'harness.config.json'], work);
+    // Since 0.11.0 `init --config` generates IN the directory that holds the config unless
+    // `--dir` says otherwise (the fix for the <name>/<name>/ nesting), so the target is explicit.
+    run('npx', ['--yes', spec, 'init', '--config', 'harness.config.json', '--dir', example.dir], work);
     if (!existsSync(generated) || !statSync(generated).isDirectory()) {
       throw new Error(
         `${spec} did not produce ${example.dir}/ — the "project.name" in ${example.config} must match the example directory.`,
