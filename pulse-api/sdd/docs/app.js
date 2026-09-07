@@ -365,12 +365,12 @@ const EN_STRINGS = {
   Agéntico: 'Agentic',
   '{specId} — estimación tradicional: {cost} (horas de tasks × tarifa {rate}/h)':
     '{specId} — traditional estimate: {cost} (task hours × {rate}/h rate)',
-  '{specId} — costo agéntico aproximado: {cost} (tokens × tarifa por tier)':
-    '{specId} — approximate agentic cost: {cost} (tokens × tier rate)',
+  '{specId} — costo agéntico aproximado: {cost} (tokens × tarifa del modelo)':
+    '{specId} — approximate agentic cost: {cost} (tokens × model rate)',
   '{specId} — sin telemetría de tokens todavía': '{specId} — no token telemetry yet',
   'Costo por spec — tradicional vs agéntico': 'Cost per spec — traditional vs agentic',
-  'Estimación tradicional (horas × tarifa) contra el costo aproximado de tokens del modo agéntico.':
-    'Traditional estimate (hours × rate) against the approximate token cost of agentic mode.',
+  'Estimación tradicional (horas × tarifa) contra el costo aproximado de tokens del modo agéntico. Incluye ciclos y fixes.':
+    'Traditional estimate (hours × rate) against the approximate token cost of agentic mode. Cycles and fixes included.',
   Entrada: 'Input',
   Salida: 'Output',
   'Tokens por ciclo': 'Tokens per cycle',
@@ -378,18 +378,40 @@ const EN_STRINGS = {
     'No telemetry yet. It gets recorded when each cycle closes: <code>cycle.json → metrics.usage</code> (done by sdd-reviewer) or per task in <code>tasks.json → usage</code>.',
   '{specId} {cycleId} — entrada: {tokensIn} tokens · salida: {tokensOut} tokens':
     '{specId} {cycleId} — input: {tokensIn} tokens · output: {tokensOut} tokens',
-  'Detalle por ciclo': 'Detail per cycle',
+  'Detalle por ciclo y fix': 'Detail per cycle and fix',
+  '{cycles} ciclos y {fixes} fixes en una sola tabla: horas estimadas contra tokens y costo agéntico registrado.':
+    '{cycles} cycles and {fixes} fixes in a single table: estimated hours against recorded tokens and agentic cost.',
+  Unidad: 'Unit',
+  Unidades: 'Units',
+  Tokens: 'Tokens',
   'Horas est.': 'Est. hours',
   'Costo trad.': 'Trad. cost',
   'Tokens in/out': 'Tokens in/out',
   'Costo agéntico': 'Agentic cost',
   Ahorro: 'Savings',
-  'Consumo por proveedor': 'Usage by provider',
+  'Consumo por proveedor y modelo': 'Usage by provider and model',
+  Modelo: 'Model',
+  'Sin modelo declarado': 'No model declared',
+  'Subtotal {provider}': 'Subtotal {provider}',
+  'Consumo por agente': 'Usage by agent',
+  Agente: 'Agent',
+  'Sin agente declarado': 'No agent declared',
+  Otro: 'Other',
+  Funcional: 'Functional',
+  Arquitecto: 'Architect',
+  'Implementor back': 'Implementor back',
+  'Implementor front': 'Implementor front',
+  Orquestador: 'Orchestrator',
+  'Uso por agente ({count})': 'Usage by agent ({count})',
+  'Sin telemetría por agente todavía. Se registra en <code>metrics.usage.by_agent</code> de cada ciclo y en el <code>usage</code> de cada fix.':
+    'No per-agent telemetry yet. It is recorded in each cycle\u2019s <code>metrics.usage.by_agent</code> and in each fix\u2019s <code>usage</code>.',
+  'Tokens y costo agrupados por rol SDD, a partir de las entradas <code>by_agent</code> de ciclos y fixes y del <code>usage</code> por task.':
+    'Tokens and cost grouped by SDD role, from the <code>by_agent</code> entries of cycles and fixes and from the per-task <code>usage</code>.',
   'Sin telemetría con proveedor declarado todavía. Las claves de {field} llevan la forma {example}.':
     'No telemetry with a declared provider yet. {field} keys use the form {example}.',
   'Sin proveedor declarado': 'No provider declared',
-  'Tokens y costo agéntico agregados por proveedor (ciclos + fixes), según las claves proveedor/modelo de la telemetría.':
-    'Tokens and agentic cost aggregated by provider (cycles + fixes), based on the provider/model keys in the telemetry.',
+  'Tokens y costo agéntico por modelo completo (proveedor/modelo), con subtotal por proveedor. Incluye ciclos y fixes.':
+    'Tokens and agentic cost per full model (provider/model), with a subtotal per provider. Cycles and fixes included.',
   // Descripciones del kit (frontmatter de agentes y skills, catálogo de prompts).
   'Agente Arquitecto SDD. Define schema de DB, contratos de API y decisiones técnicas del módulo. Invocar después del Funcional, en paralelo con el Planner.':
     'SDD Architect agent. Defines the DB schema, the API contracts and the module\'s technical decisions. Invoke after the Functional agent, in parallel with the Planner.',
@@ -488,27 +510,26 @@ const EN_STRINGS = {
   Proveedor: 'Provider',
   'Modelos usados': 'Models used',
   Origen: 'Source',
-  medido: 'measured',
+  exacto: 'exact',
   estimado: 'estimated',
-  'parcialmente estimado': 'partly estimated',
-  '<strong>Origen</strong>: medido = leído de un contador de la sesión; estimado = aproximación declarada por el agente (arneses sin contador, como Copilot o Antigravity).':
-    '<strong>Source</strong>: measured = read from a session counter; estimated = approximation declared by the agent (harnesses with no counter, such as Copilot or Antigravity).',
+  mixto: 'mixed',
+  '<strong>Origen</strong>: exacto = leído de un contador de la sesión (por ejemplo <code>agent-usage-notification</code>, el conteo por subagente que reporta el arnés); estimado = aproximación declarada por el agente (arneses sin contador, como Copilot o Antigravity); mixto = mezcla de ambos.':
+    '<strong>Source</strong>: exact = read from a session counter (for example <code>agent-usage-notification</code>, the per-subagent count the harness reports); estimated = an approximation declared by the agent (harnesses with no counter, such as Copilot or Antigravity); mixed = a blend of both.',
   ' · {n} omitida{suffix}': ' · {n} skipped',
   'skipped — resuelta / no aplica': 'skipped — resolved / not applicable',
   'Tokens in': 'Tokens in',
   'Tokens out': 'Tokens out',
   'Costo aprox.': 'Approx. cost',
-  'Costos de fixes': 'Fix costs',
-  '{count} fixes registrados, {withUsage} con telemetría. El usage se registra al cerrar cada fix (FIX GATE).':
-    '{count} fixes registered, {withUsage} with telemetry. Usage is recorded when each fix closes (FIX GATE).',
   'Metodología y tarifas': 'Methodology and rates',
   'Σ estimation_hours de las tasks × {rate}/h.': 'Σ estimation_hours of the tasks × {rate}/h.',
-  'tokens registrados × tarifa del tier (USD por millón de tokens).':
-    'tokens recorded × tier rate (USD per million tokens).',
-  'La telemetría la escribe el sdd-reviewer al cerrar cada ciclo (<code>metrics.usage</code>) o los implementadores por task; es obligatoria y, cuando el arnés no expone contador, se registra como estimación declarada (<code>approx: true</code>) — nunca se omite.':
-    'The telemetry is written by sdd-reviewer when each cycle closes (<code>metrics.usage</code>) or by the implementers per task; it is mandatory and, when the harness exposes no counter, it is recorded as a declared estimate (<code>approx: true</code>) — never omitted.',
-  '* Tokens sin tier declarado se tarifan como <code>{tier}</code>.':
-    '* Tokens with no declared tier are priced as <code>{tier}</code>.',
+  'tokens registrados × tarifa del modelo (USD por millón de tokens).':
+    'tokens recorded × model rate (USD per million tokens).',
+  'Prioridad de fuentes por ciclo: <code>metrics.usage.by_agent</code> → <code>metrics.usage.by_tier</code> → <code>tasks[].usage</code> → tokens top-level de <code>metrics.usage</code>.':
+    'Source priority per cycle: <code>metrics.usage.by_agent</code> → <code>metrics.usage.by_tier</code> → <code>tasks[].usage</code> → top-level tokens of <code>metrics.usage</code>.',
+  'La telemetría la escribe cada agente al cerrar su unidad de trabajo y el sdd-reviewer la consolida al cerrar el ciclo (<code>metrics.usage</code>); es obligatoria y, cuando el arnés no expone contador, se registra como estimación declarada (<code>approx: true</code>) — nunca se omite.':
+    'Each agent writes the telemetry when it closes its unit of work and sdd-reviewer consolidates it at cycle close (<code>metrics.usage</code>); it is mandatory and, when the harness exposes no counter, it is recorded as a declared estimate (<code>approx: true</code>) — never omitted.',
+  '* Tokens sin modelo declarado (o con un modelo sin tarifa) se tarifan como <code>{tier}</code>.':
+    '* Tokens with no declared model (or with a model that has no rate) are priced as <code>{tier}</code>.',
   'No hay <code>sdd/pricing.json</code> — usando tarifas por defecto del kit.':
     'There is no <code>sdd/pricing.json</code> — using the kit’s default rates.',
   'Tarifas editables en <code>sdd/pricing.json</code>.': 'Rates editable in <code>sdd/pricing.json</code>.',
@@ -556,6 +577,200 @@ const EN_STRINGS = {
   Código: 'Code',
   Descripción: 'Description',
   Columna: 'Column',
+
+  // Costs — tabs, charts, RTK
+  'Vistas de costos':
+    'Cost views',
+  'Sin datos para graficar todavía.':
+    'No data to chart yet.',
+  'Otros ({count})':
+    'Other ({count})',
+  'Distribución':
+    'Breakdown',
+  'Gráfico de columnas':
+    'Column chart',
+  'Gráfico de línea':
+    'Line chart',
+  'Se muestran {shown} de {total}; el resto está en la tabla.':
+    'Showing {shown} of {total}; the rest is in the table.',
+  'Fixes globales':
+    'Global fixes',
+  'Costo agéntico por agente':
+    'Agentic cost per agent',
+  'Qué parte del gasto se lleva cada rol SDD.':
+    'How much of the spend each SDD role takes.',
+  'Tokens por proveedor':
+    'Tokens per provider',
+  'Reparto de los tokens registrados entre proveedores.':
+    'How the recorded tokens split across providers.',
+  'Origen de la telemetría':
+    'Telemetry origin',
+  'Registros leídos de un contador real contra estimaciones declaradas por el agente.':
+    'Records read from a real counter against estimates declared by the agent.',
+  'Exacto':
+    'Exact',
+  'Estimado':
+    'Estimated',
+  '{count} registros':
+    '{count} records',
+  'Costo por spec — solo ciclos':
+    'Cost per spec — cycles only',
+  'Horas estimadas de las tasks contra los tokens registrados en cada ciclo de la spec.':
+    'Estimated task hours against the tokens recorded in each cycle of the spec.',
+  'Entrada y salida apiladas por ciclo, en orden de spec.':
+    'Input and output stacked per cycle, in spec order.',
+  'Specs con ciclos':
+    'Specs with cycles',
+  'Ciclos':
+    'Cycles',
+  '{count} ciclos. La tabla tiene alto fijo: desplazá dentro de ella.':
+    '{count} cycles. The table has a fixed height: scroll inside it.',
+  'Detalle por ciclo':
+    'Cycle detail',
+  'Costo por tipo de fix':
+    'Cost per fix type',
+  'Tradicional contra agéntico, agrupado por HOTFIX / BUGFIX / FIX.':
+    'Traditional against agentic, grouped by HOTFIX / BUGFIX / FIX.',
+  'Fixes por severidad':
+    'Fixes by severity',
+  'Cuántos fixes entraron por cada nivel.':
+    'How many fixes came in at each level.',
+  'Crítica':
+    'Critical',
+  'Alta':
+    'High',
+  'Media':
+    'Medium',
+  'Baja':
+    'Low',
+  'Sin severidad':
+    'No severity',
+  'Fixes por estado':
+    'Fixes by status',
+  'Pendientes, en curso y cerrados.':
+    'Pending, in progress and closed.',
+  'Tokens por fix':
+    'Tokens per fix',
+  'Los fixes que más tokens consumieron, de mayor a menor.':
+    'The fixes that consumed the most tokens, highest first.',
+  'Sin telemetría por fix todavía. Se registra en el <code>usage</code> de cada fix al cerrarlo.':
+    'No per-fix telemetry yet. It is recorded in each fix’s <code>usage</code> when it closes.',
+  'Fixes abiertos':
+    'Open fixes',
+  'Sin fixes todavía':
+    'No fixes yet',
+  'Cuando el FIX GATE registre fixes con horas estimadas y telemetría, el tablero aparece acá.':
+    'Once the FIX GATE records fixes with estimated hours and telemetry, the board shows up here.',
+  '{count} fixes. La tabla tiene alto fijo: desplazá dentro de ella.':
+    '{count} fixes. The table has a fixed height: scroll inside it.',
+  'Detalle por fix':
+    'Fix detail',
+  'Apagado':
+    'Off',
+  'Sin binario':
+    'No binary',
+  'Activo':
+    'Active',
+  'Estado':
+    'Status',
+  'Binario':
+    'Binary',
+  'Alcance':
+    'Scope',
+  'no encontrado':
+    'not found',
+  'Detalle por comando':
+    'Per-command detail',
+  'leído de la base local de rtk':
+    'read from rtk’s local database',
+  'no disponible en este runtime (Node ≥ 22.5 lo habilita)':
+    'not available on this runtime (Node ≥ 22.5 enables it)',
+  'rtk en este repo':
+    'rtk in this repo',
+  'rtk comprime la salida de los comandos de shell antes de que el agente la lea. Viene activo por defecto con el kit; los hooks de Claude Code y Gemini CLI pasan por <code>sdd/scripts/rtk-hook.mjs</code>, y <code>sdd/tools.json</code> es el interruptor.':
+    'rtk compresses the output of shell commands before the agent reads it. It ships enabled with the kit; the Claude Code and Gemini CLI hooks go through <code>sdd/scripts/rtk-hook.mjs</code>, and <code>sdd/tools.json</code> is the switch.',
+  'Apagar / prender: <code>pnpm sdd:rtk -- --disable</code> · <code>pnpm sdd:rtk -- --enable</code>, o pedírselo al sdd-steward. Estos números viven en la máquina donde corre <code>sdd:docs</code> (rtk guarda su historial por usuario, no en el repo) y son estimaciones: rtk cuenta bytes ÷ 4, no tokens del proveedor.':
+    'Turn off / on: <code>pnpm sdd:rtk -- --disable</code> · <code>pnpm sdd:rtk -- --enable</code>, or ask the sdd-steward. These numbers live on the machine running <code>sdd:docs</code> (rtk keeps its history per user, not in the repo) and are estimates: rtk counts bytes ÷ 4, not provider tokens.',
+  'Actualizar':
+    'Refresh',
+  'Comandos comprimidos':
+    'Compressed commands',
+  'Tokens generados':
+    'Tokens generated',
+  'Tokens leídos por el agente':
+    'Tokens read by the agent',
+  'Tokens ahorrados':
+    'Tokens saved',
+  '{pct}% promedio':
+    '{pct}% average',
+  'Equivalente aprox.':
+    'Approx. equivalent',
+  'a tarifa input de {tier}':
+    'at {tier} input rate',
+  'Últimos 30 días — leído vs ahorrado':
+    'Last 30 days — read vs saved',
+  'Cada columna es la salida completa de los comandos del día: la parte que el agente leyó y la que rtk recortó.':
+    'Each column is the full output of the day’s commands: the part the agent read and the part rtk trimmed.',
+  'Leído por el agente':
+    'Read by the agent',
+  'Ahorrado':
+    'Saved',
+  '{commands} comandos · leídos {read} · ahorrados {saved} ({pct}%)':
+    '{commands} commands · read {read} · saved {saved} ({pct}%)',
+  'Ahorro acumulado (30 días)':
+    'Cumulative savings (30 days)',
+  'Tokens que el agente no tuvo que leer, sumados día a día.':
+    'Tokens the agent never had to read, added up day by day.',
+  'acumulado: {saved} tokens ahorrados':
+    'cumulative: {saved} tokens saved',
+  'Por mes':
+    'Per month',
+  'Mismo desglose, agrupado por mes.':
+    'Same breakdown, grouped by month.',
+  'Comando':
+    'Command',
+  'Veces':
+    'Times',
+  'Generados':
+    'Generated',
+  'Leídos':
+    'Read',
+  'Ahorrados':
+    'Saved',
+  'Tiempo':
+    'Time',
+  'Cuándo':
+    'When',
+  '{count} familias de comando. La tabla tiene alto fijo: desplazá dentro de ella.':
+    '{count} command families. The table has a fixed height: scroll inside it.',
+  'Ahorro por comando':
+    'Savings per command',
+  'Qué comandos recortan más. Agrupados por familia (<code>git status</code>, <code>pnpm test</code>, …).':
+    'Which commands trim the most. Grouped by family (<code>git status</code>, <code>pnpm test</code>, …).',
+  'Últimos comandos':
+    'Recent commands',
+  'Los {count} más recientes en este repo.':
+    'The {count} most recent in this repo.',
+  'Solo con el servidor local':
+    'Local server only',
+  'La ganancia de rtk se lee de la máquina que corre pnpm sdd:docs; en hosting estático no está disponible.':
+    'rtk savings are read from the machine running pnpm sdd:docs; they are not available on static hosting.',
+  'El servidor no respondió':
+    'The server did not answer',
+  'Reiniciá pnpm sdd:docs para tomar la versión nueva del visor.':
+    'Restart pnpm sdd:docs to pick up the new viewer version.',
+  'rtk no está instalado en esta máquina':
+    'rtk is not installed on this machine',
+  'Corré pnpm sdd:rtk para instalarlo (descarga el binario oficial con checksum verificado). Si la red lo bloquea: curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh':
+    'Run pnpm sdd:rtk to install it (downloads the official binary with a verified checksum). If the network blocks it: curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh',
+  'Todavía sin comandos comprimidos en este repo':
+    'No compressed commands in this repo yet',
+  'Apenas un agente corra comandos de shell con el hook activo, el ahorro aparece acá.':
+    'As soon as an agent runs shell commands with the hook active, the savings show up here.',
+  'rtk está apagado en sdd/tools.json. Prendelo con pnpm sdd:rtk -- --enable.':
+    'rtk is off in sdd/tools.json. Turn it on with pnpm sdd:rtk -- --enable.',
+  'Cuando el loop SDD complete ciclos con tasks estimadas y telemetría de tokens, el tablero aparece acá. La pestaña RTK ya muestra el ahorro de tokens en comandos.':
+    'Once the SDD loop completes cycles with estimated tasks and token telemetry, the board shows up here. The RTK tab already shows the token savings on commands.',
 };
 
 function t(text, params) {
@@ -3995,8 +4210,9 @@ function cycleActivityFeed(cycle, tasks, cycleId) {
 
   for (const task of tasks?.tasks ?? []) {
     const u = task.usage;
+    const model = u ? (u.provider_model ?? u.model_tier ?? null) : null;
     const tokens = u
-      ? ` · ${costsTokensFormat().format((u.tokens_in ?? 0) + (u.tokens_out ?? 0))} tokens${u.model_tier ? ` (${u.model_tier})` : ''}`
+      ? ` · ${costsTokensFormat().format(u.tokens_total ?? (u.tokens_in ?? 0) + (u.tokens_out ?? 0))} tokens${model ? ` (${model})` : ''}`
       : '';
     const tone =
       task.status === 'done'
@@ -4037,6 +4253,36 @@ function cycleActivityFeed(cycle, tasks, cycleId) {
   return `
     <div>
       <p style="${CYCLE_EYEBROW_STYLE}">${t('Actividad del ciclo — derivada de los registros')}</p>
+      <div style="display:flex; flex-direction:column; gap:8px; padding:12px 14px; border:1px solid var(--border); border-radius: var(--radius-lg)">${lines}</div>
+    </div>
+  `;
+}
+
+function cycleAgentUsageBlock(cycle) {
+  const byAgent = cycle?.metrics?.usage?.by_agent;
+  if (!Array.isArray(byAgent) || byAgent.length === 0) return '';
+  const lines = byAgent
+    .map((entry) => {
+      const bucket = { agent: entry.agent ?? null, label: entry.label ?? null };
+      const model = normalizeTierKey(entry.provider_model ?? null) ?? '—';
+      const tokens = costsTokensFormat().format(
+        entry.tokens_total ?? (entry.tokens_in ?? 0) + (entry.tokens_out ?? 0),
+      );
+      const origin = originBadge(
+        entry.approx === true ? COSTS_ORIGIN_ESTIMATED : COSTS_ORIGIN_EXACT,
+      );
+      const effort = entry.effort ? ` · ${entry.effort}` : '';
+      return `
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; min-width:0">
+          <span style="flex:0 0 auto; font-family: var(--font-mono); font-size: var(--text-11); color: rgb(var(--rgb-emerald-400))">${escapeHtml(costsAgentLabel(bucket))}</span>
+          <span style="font-family: var(--font-mono); font-size: var(--text-11); color: var(--text-muted)">${escapeHtml(`${model}${effort} · ${tokens} tokens`)}</span>
+          ${origin}
+        </div>`;
+    })
+    .join('');
+  return `
+    <div>
+      <p style="${CYCLE_EYEBROW_STYLE}">${escapeHtml(t('Uso por agente ({count})', { count: byAgent.length }))}</p>
       <div style="display:flex; flex-direction:column; gap:8px; padding:12px 14px; border:1px solid var(--border); border-radius: var(--radius-lg)">${lines}</div>
     </div>
   `;
@@ -4122,6 +4368,7 @@ function cycleModalResumenView(specId, cycleId, cycle, files, onTabIndex, tasks)
       </div>
       ${dateFields.length ? `<div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:16px">${dateFields.join('')}</div>` : ''}
       ${cycleActivityFeed(cycle, tasks, cycleId)}
+      ${cycleAgentUsageBlock(cycle)}
       ${docsBlock}
       ${artifactsBlock}
     </div>
@@ -6802,101 +7049,298 @@ async function loadPricing() {
   }
 }
 
+const COSTS_ORIGIN_EXACT = 'exacto';
+const COSTS_ORIGIN_ESTIMATED = 'estimado';
+const COSTS_ORIGIN_MIXED = 'mixto';
+const COSTS_NO_AGENT = '_no_agent';
+
+const COSTS_AGENT_LABELS = {
+  functional: 'Funcional',
+  planner: 'Planner',
+  architect: 'Arquitecto',
+  'implementor-back': 'Implementor back',
+  'implementor-front': 'Implementor front',
+  reviewer: 'Reviewer',
+  orchestrator: 'Orquestador',
+  steward: 'Steward',
+  hermes: 'Hermes',
+  custom: 'Otro',
+};
+
 function emptyCostUsage() {
   return {
     tokensIn: 0,
     tokensOut: 0,
+    tokensDisplay: 0,
+    hasExplicitTotal: false,
     durationMinutes: 0,
     byTier: {},
+    entries: [],
+    exactUnits: 0,
+    approxUnits: 0,
     hasData: false,
     approx: false,
+    basis: null,
   };
 }
 
-function addTierTokens(usage, tier, tokensIn, tokensOut, approx = false) {
+function addTierTokens(
+  usage,
+  tier,
+  tokensIn,
+  tokensOut,
+  approx = false,
+  tokensTotal = null,
+) {
   const key = normalizeTierKey(tier) ?? COSTS_UNTIERED;
-  usage.byTier[key] ??= { tokensIn: 0, tokensOut: 0, approx: false };
-  usage.byTier[key].tokensIn += tokensIn;
-  usage.byTier[key].tokensOut += tokensOut;
-  usage.byTier[key].approx ||= approx;
+  usage.byTier[key] ??= {
+    tokensIn: 0,
+    tokensOut: 0,
+    tokensDisplay: 0,
+    approx: false,
+    exactUnits: 0,
+    approxUnits: 0,
+  };
+  const hasTotal = typeof tokensTotal === 'number' && tokensTotal >= 0;
+  const display = hasTotal ? tokensTotal : tokensIn + tokensOut;
+  const bucket = usage.byTier[key];
+  bucket.tokensIn += tokensIn;
+  bucket.tokensOut += tokensOut;
+  bucket.tokensDisplay += display;
+  bucket.approx ||= approx;
+  if (approx) bucket.approxUnits += 1;
+  else bucket.exactUnits += 1;
   usage.tokensIn += tokensIn;
   usage.tokensOut += tokensOut;
+  usage.tokensDisplay += display;
+  usage.hasExplicitTotal ||= hasTotal;
+  if (approx) usage.approxUnits += 1;
+  else usage.exactUnits += 1;
   usage.hasData = true;
   usage.approx ||= approx;
 }
 
-function usageFromCycleMetrics(metricsUsage) {
+function pushUsageEntry(usage, entry) {
+  const providerModel = normalizeTierKey(entry.providerModel ?? null);
+  const approx = entry.approx === true;
+  const tokensIn = entry.tokensIn ?? 0;
+  const tokensOut = entry.tokensOut ?? 0;
+  const tokensTotal =
+    typeof entry.tokensTotal === 'number' ? entry.tokensTotal : null;
+  usage.entries.push({
+    agent: entry.agent ?? null,
+    label: entry.label ?? null,
+    providerModel,
+    effort: entry.effort ?? null,
+    tokensIn,
+    tokensOut,
+    tokensTotal,
+    tokensDisplay: tokensTotal ?? tokensIn + tokensOut,
+    approx,
+    source: entry.source ?? null,
+    recordedAt: entry.recordedAt ?? null,
+    unitLabel: entry.unitLabel ?? null,
+  });
+  addTierTokens(usage, providerModel, tokensIn, tokensOut, approx, tokensTotal);
+}
+
+function usageOrigin(counts) {
+  const exact = counts?.exactUnits ?? 0;
+  const approx = counts?.approxUnits ?? 0;
+  if (exact > 0 && approx > 0) return COSTS_ORIGIN_MIXED;
+  if (approx > 0) return COSTS_ORIGIN_ESTIMATED;
+  if (exact > 0) return COSTS_ORIGIN_EXACT;
+  return null;
+}
+
+function originBadge(origin) {
+  if (!origin) return '—';
+  if (origin === COSTS_ORIGIN_EXACT)
+    return badge(COSTS_ORIGIN_EXACT, 'badge--origin-exact');
+  if (origin === COSTS_ORIGIN_MIXED)
+    return badge(COSTS_ORIGIN_MIXED, 'badge--origin-mixed');
+  return badge(COSTS_ORIGIN_ESTIMATED, 'badge--origin-estimated');
+}
+
+function usageFromAgentList(byAgent, unitLabel) {
   const usage = emptyCostUsage();
-  if (!metricsUsage) return usage;
-  usage.durationMinutes = metricsUsage.duration_minutes ?? 0;
-  const parentApprox = metricsUsage.approx === true;
-  const byTier = metricsUsage.by_tier ?? null;
-  if (byTier && Object.keys(byTier).length > 0) {
-    for (const [tier, tokens] of Object.entries(byTier)) {
-      addTierTokens(
-        usage,
-        tier,
-        tokens.tokens_in ?? 0,
-        tokens.tokens_out ?? 0,
-        tokens.approx ?? parentApprox,
-      );
-    }
-  } else {
-    addTierTokens(
-      usage,
-      null,
-      metricsUsage.tokens_in ?? 0,
-      metricsUsage.tokens_out ?? 0,
-      parentApprox,
-    );
+  for (const item of byAgent ?? []) {
+    usage.durationMinutes += item.duration_minutes ?? 0;
+    pushUsageEntry(usage, {
+      agent: item.agent ?? null,
+      label: item.label ?? null,
+      providerModel: item.provider_model ?? null,
+      effort: item.effort ?? null,
+      tokensIn: item.tokens_in ?? 0,
+      tokensOut: item.tokens_out ?? 0,
+      tokensTotal: item.tokens_total ?? null,
+      approx: item.approx === true,
+      source: item.source ?? null,
+      recordedAt: item.recorded_at ?? null,
+      unitLabel: item.label ?? unitLabel ?? null,
+    });
   }
+  return usage;
+}
+
+function usageFromTierMap(byTier, parentApprox, parentSource, unitLabel) {
+  const usage = emptyCostUsage();
+  for (const [tier, tokens] of Object.entries(byTier ?? {})) {
+    pushUsageEntry(usage, {
+      providerModel: tier,
+      tokensIn: tokens.tokens_in ?? 0,
+      tokensOut: tokens.tokens_out ?? 0,
+      approx: tokens.approx ?? parentApprox,
+      source: tokens.source ?? parentSource,
+      unitLabel,
+    });
+  }
+  return usage;
+}
+
+function usageFromTopLevelMetrics(metricsUsage, unitLabel) {
+  const usage = emptyCostUsage();
+  usage.durationMinutes = metricsUsage.duration_minutes ?? 0;
+  pushUsageEntry(usage, {
+    providerModel: null,
+    tokensIn: metricsUsage.tokens_in ?? 0,
+    tokensOut: metricsUsage.tokens_out ?? 0,
+    tokensTotal: metricsUsage.tokens_total ?? null,
+    approx: metricsUsage.approx === true,
+    source: metricsUsage.source ?? null,
+    unitLabel,
+  });
   return usage;
 }
 
 function usageFromTasks(tasks) {
   const usage = emptyCostUsage();
-  for (const task of tasks) {
-    if (!task.usage) continue;
-    usage.durationMinutes += task.usage.duration_minutes ?? 0;
-    addTierTokens(
-      usage,
-      task.usage.model_tier ?? null,
-      task.usage.tokens_in ?? 0,
-      task.usage.tokens_out ?? 0,
-      task.usage.approx === true,
-    );
+  for (const task of tasks ?? []) {
+    const entry = task.usage;
+    if (!entry) continue;
+    usage.durationMinutes += entry.duration_minutes ?? 0;
+    pushUsageEntry(usage, {
+      agent: entry.agent ?? null,
+      label: entry.agent === 'custom' ? (task.id ?? null) : null,
+      providerModel: entry.provider_model ?? entry.model_tier ?? null,
+      effort: entry.effort ?? null,
+      tokensIn: entry.tokens_in ?? 0,
+      tokensOut: entry.tokens_out ?? 0,
+      tokensTotal: entry.tokens_total ?? null,
+      approx: entry.approx === true,
+      source: entry.source ?? null,
+      recordedAt: entry.recorded_at ?? null,
+      unitLabel: task.id ?? null,
+    });
   }
   return usage;
 }
 
+/**
+ * Prioridad de fuentes para un ciclo, de más específica a más gruesa:
+ * metrics.usage.by_agent → metrics.usage.by_tier → tasks[].usage → tokens
+ * top-level de metrics.usage. by_tier puede faltar o estar desincronizado en
+ * datos viejos, por eso by_agent manda cuando existe.
+ */
+function resolveCycleUsage(cycle, tasks) {
+  const metricsUsage = cycle?.metrics?.usage ?? null;
+  if (
+    Array.isArray(metricsUsage?.by_agent) &&
+    metricsUsage.by_agent.length > 0
+  ) {
+    const usage = usageFromAgentList(metricsUsage.by_agent);
+    if (usage.durationMinutes === 0)
+      usage.durationMinutes = metricsUsage.duration_minutes ?? 0;
+    usage.basis = 'by_agent';
+    return usage;
+  }
+  if (
+    metricsUsage?.by_tier &&
+    Object.keys(metricsUsage.by_tier).length > 0
+  ) {
+    const usage = usageFromTierMap(
+      metricsUsage.by_tier,
+      metricsUsage.approx === true,
+      metricsUsage.source ?? null,
+    );
+    usage.durationMinutes = metricsUsage.duration_minutes ?? 0;
+    usage.basis = 'by_tier';
+    return usage;
+  }
+  const fromTasks = usageFromTasks(tasks);
+  if (fromTasks.hasData) {
+    if (fromTasks.durationMinutes === 0)
+      fromTasks.durationMinutes = metricsUsage?.duration_minutes ?? 0;
+    fromTasks.basis = 'tasks';
+    return fromTasks;
+  }
+  if (metricsUsage) {
+    const usage = usageFromTopLevelMetrics(metricsUsage);
+    usage.basis = 'metrics';
+    return usage;
+  }
+  return emptyCostUsage();
+}
+
 function usageFromFixEntry(fix) {
+  const entry = fix?.usage;
+  if (!entry) return emptyCostUsage();
+  if (Array.isArray(entry.by_agent) && entry.by_agent.length > 0) {
+    const usage = usageFromAgentList(entry.by_agent, fix.id);
+    if (usage.durationMinutes === 0)
+      usage.durationMinutes = entry.duration_minutes ?? 0;
+    usage.basis = 'by_agent';
+    return usage;
+  }
   const usage = emptyCostUsage();
-  if (!fix.usage) return usage;
-  usage.durationMinutes = fix.usage.duration_minutes ?? 0;
-  addTierTokens(
-    usage,
-    fix.usage.model_tier ?? null,
-    fix.usage.tokens_in ?? 0,
-    fix.usage.tokens_out ?? 0,
-    fix.usage.approx === true,
-  );
+  usage.durationMinutes = entry.duration_minutes ?? 0;
+  pushUsageEntry(usage, {
+    agent: entry.agent ?? null,
+    label: entry.agent === 'custom' ? (fix.id ?? null) : null,
+    providerModel: entry.provider_model ?? entry.model_tier ?? null,
+    effort: entry.effort ?? null,
+    tokensIn: entry.tokens_in ?? 0,
+    tokensOut: entry.tokens_out ?? 0,
+    tokensTotal: entry.tokens_total ?? null,
+    approx: entry.approx === true,
+    source: entry.source ?? null,
+    recordedAt: entry.recorded_at ?? null,
+    unitLabel: fix.id ?? null,
+  });
+  usage.basis = 'fix';
   return usage;
+}
+
+function modelCostUsd(tier, tokensIn, tokensOut, pricing) {
+  const key = normalizeTierKey(tier);
+  let prices = key ? pricing.model_prices_per_mtok[key] : null;
+  let assumed = false;
+  if (!prices) {
+    prices =
+      pricing.model_prices_per_mtok[COSTS_ASSUMED_TIER] ??
+      COSTS_FALLBACK_PRICING.model_prices_per_mtok[COSTS_ASSUMED_TIER];
+    assumed = true;
+  }
+  return {
+    cost:
+      (tokensIn / 1_000_000) * prices.input +
+      (tokensOut / 1_000_000) * prices.output,
+    assumed,
+  };
 }
 
 function agenticCostUsd(usage, pricing) {
   let cost = 0;
   let assumed = false;
   for (const [tier, tokens] of Object.entries(usage.byTier)) {
-    let prices = pricing.model_prices_per_mtok[tier];
-    if (!prices) {
-      prices =
-        pricing.model_prices_per_mtok[COSTS_ASSUMED_TIER] ??
-        COSTS_FALLBACK_PRICING.model_prices_per_mtok[COSTS_ASSUMED_TIER];
-      assumed = true;
-    }
-    cost +=
-      (tokens.tokensIn / 1_000_000) * prices.input +
-      (tokens.tokensOut / 1_000_000) * prices.output;
+    const priced = modelCostUsd(
+      tier === COSTS_UNTIERED ? null : tier,
+      tokens.tokensIn,
+      tokens.tokensOut,
+      pricing,
+    );
+    cost += priced.cost;
+    assumed ||= priced.assumed;
   }
   return { cost, assumed };
 }
@@ -6926,15 +7370,16 @@ async function loadCostsData() {
   for (const result of results) {
     if (result.status !== 'fulfilled') continue;
     const { specId, cycleId, cycle, tasks } = result.value;
-    const usage = cycle.metrics?.usage
-      ? usageFromCycleMetrics(cycle.metrics.usage)
-      : usageFromTasks(tasks);
+    const usage = resolveCycleUsage(cycle, tasks);
     const estimationHours = tasks.reduce(
       (sum, task) => sum + (task.estimation_hours ?? 0),
       0,
     );
     const agentic = agenticCostUsd(usage, pricing);
     rows.push({
+      kind: 'cycle',
+      id: `${specId} · ${cycleId}`,
+      href: '#/cycles',
       specId,
       cycleId,
       module: cycle.module ?? specId,
@@ -6959,9 +7404,14 @@ async function loadCostsData() {
     const agentic = agenticCostUsd(usage, pricing);
     const estimationHours = fix.estimation_hours ?? 0;
     return {
+      kind: 'fix',
+      id: fix.id,
+      href: '#/fixes',
       fixId: fix.id,
       title: fix.title ?? fix.id,
+      module: fix.title ?? fix.id,
       type: fix.type ?? 'FIX',
+      severity: fix.severity ?? null,
       status: fix.status ?? 'pending',
       specId: fix.spec_id,
       estimationHours,
@@ -6975,35 +7425,132 @@ async function loadCostsData() {
   return { pricing, rows, fixRows };
 }
 
-function providerTotals(rows, fixRows, pricing) {
+function costsAgentKey(entry) {
+  if (entry.agent === 'custom') return `custom:${entry.label ?? ''}`;
+  return entry.agent ?? COSTS_NO_AGENT;
+}
+
+function costsAgentLabel(bucket) {
+  if (!bucket.agent) return t('Sin agente declarado');
+  if (bucket.agent === 'custom') return bucket.label ?? t('Otro');
+  return t(COSTS_AGENT_LABELS[bucket.agent] ?? bucket.agent);
+}
+
+function costsAgentAggregation(rows, fixRows, pricing) {
   const totals = new Map();
   const accumulate = (usage) => {
-    for (const [tier, tokens] of Object.entries(usage.byTier)) {
-      const provider = providerOfTier(tier) ?? COSTS_UNTIERED;
-      const entry = totals.get(provider) ?? {
+    for (const entry of usage.entries) {
+      const key = costsAgentKey(entry);
+      const bucket = totals.get(key) ?? {
+        key,
+        agent: entry.agent ?? null,
+        label: entry.label ?? null,
+        units: 0,
         tokensIn: 0,
         tokensOut: 0,
+        tokensDisplay: 0,
         cost: 0,
         models: new Set(),
-        approx: false,
-        measured: false,
+        exactUnits: 0,
+        approxUnits: 0,
+        assumed: false,
       };
-      entry.tokensIn += tokens.tokensIn;
-      entry.tokensOut += tokens.tokensOut;
-      if (tokens.approx) entry.approx = true;
-      else entry.measured = true;
-      const partial = emptyCostUsage();
-      partial.byTier[tier] = tokens;
-      entry.cost += agenticCostUsd(partial, pricing).cost;
-      if (provider !== COSTS_UNTIERED) {
-        entry.models.add(tier.slice(provider.length + 1));
-      }
-      totals.set(provider, entry);
+      bucket.units += 1;
+      bucket.tokensIn += entry.tokensIn;
+      bucket.tokensOut += entry.tokensOut;
+      bucket.tokensDisplay += entry.tokensDisplay;
+      const priced = modelCostUsd(
+        entry.providerModel,
+        entry.tokensIn,
+        entry.tokensOut,
+        pricing,
+      );
+      bucket.cost += priced.cost;
+      bucket.assumed ||= priced.assumed;
+      if (entry.providerModel) bucket.models.add(entry.providerModel);
+      if (entry.approx) bucket.approxUnits += 1;
+      else bucket.exactUnits += 1;
+      totals.set(key, bucket);
     }
   };
   for (const row of rows) accumulate(row.usage);
   for (const fix of fixRows) accumulate(fix.usage);
-  return totals;
+  return [...totals.values()].sort((a, b) => b.cost - a.cost);
+}
+
+function costsModelAggregation(rows, fixRows, pricing) {
+  const totals = new Map();
+  const accumulate = (usage) => {
+    for (const [tier, tokens] of Object.entries(usage.byTier)) {
+      const bucket = totals.get(tier) ?? {
+        model: tier,
+        provider: providerOfTier(tier) ?? COSTS_UNTIERED,
+        units: 0,
+        tokensIn: 0,
+        tokensOut: 0,
+        tokensDisplay: 0,
+        cost: 0,
+        exactUnits: 0,
+        approxUnits: 0,
+        assumed: false,
+      };
+      bucket.units += tokens.exactUnits + tokens.approxUnits;
+      bucket.tokensIn += tokens.tokensIn;
+      bucket.tokensOut += tokens.tokensOut;
+      bucket.tokensDisplay += tokens.tokensDisplay;
+      bucket.exactUnits += tokens.exactUnits;
+      bucket.approxUnits += tokens.approxUnits;
+      const priced = modelCostUsd(
+        tier === COSTS_UNTIERED ? null : tier,
+        tokens.tokensIn,
+        tokens.tokensOut,
+        pricing,
+      );
+      bucket.cost += priced.cost;
+      bucket.assumed ||= priced.assumed;
+      totals.set(tier, bucket);
+    }
+  };
+  for (const row of rows) accumulate(row.usage);
+  for (const fix of fixRows) accumulate(fix.usage);
+  return [...totals.values()];
+}
+
+function costsProviderGroups(modelRows) {
+  const groups = new Map();
+  for (const model of modelRows) {
+    const group = groups.get(model.provider) ?? {
+      provider: model.provider,
+      models: [],
+      tokensIn: 0,
+      tokensOut: 0,
+      tokensDisplay: 0,
+      cost: 0,
+      exactUnits: 0,
+      approxUnits: 0,
+    };
+    group.models.push(model);
+    group.tokensIn += model.tokensIn;
+    group.tokensOut += model.tokensOut;
+    group.tokensDisplay += model.tokensDisplay;
+    group.cost += model.cost;
+    group.exactUnits += model.exactUnits;
+    group.approxUnits += model.approxUnits;
+    groups.set(model.provider, group);
+  }
+  const list = [...groups.values()];
+  for (const group of list) group.models.sort((a, b) => b.cost - a.cost);
+  return list.sort((a, b) => b.cost - a.cost);
+}
+
+function providerLabel(provider) {
+  if (provider === COSTS_UNTIERED) return t('Sin proveedor declarado');
+  return COSTS_PROVIDER_LABELS[provider] ?? provider;
+}
+
+function costsModelShortName(model) {
+  if (model.model === COSTS_UNTIERED) return t('Sin modelo declarado');
+  return model.model;
 }
 
 function costsMoneyFormatter(currency) {
@@ -7066,233 +7613,126 @@ function shortSpecLabel(specId) {
   return specId.replace(/^spec-/, '');
 }
 
-function costsComparisonCard(rows, pricing, money) {
-  const bySpec = new Map();
-  for (const row of rows) {
-    const entry = bySpec.get(row.specId) ?? {
-      traditional: 0,
-      agentic: 0,
-      hasUsage: false,
-    };
-    entry.traditional += row.traditionalCost;
-    entry.agentic += row.agenticCost;
-    entry.hasUsage ||= row.usage.hasData;
-    bySpec.set(row.specId, entry);
-  }
-  const max = Math.max(
-    1e-9,
-    ...[...bySpec.values()].flatMap((entry) => [
-      entry.traditional,
-      entry.agentic,
-    ]),
-  );
-  const blocks = [...bySpec.entries()]
-    .map(([specId, entry]) => {
-      const agenticLabel = entry.hasUsage ? money.format(entry.agentic) : '—';
-      return `
-        <div style="display:grid;gap:2px;margin-bottom:14px">
-          <a href="#/cycles" style="font-family:var(--font-mono);font-size:var(--text-12);color:var(--text-strong);text-decoration:none;margin-bottom:2px">${escapeHtml(specId)}</a>
-          ${costBarRow({
-            label: t('Tradicional'),
-            valueLabel: money.format(entry.traditional),
-            segments: [
-              { value: entry.traditional, color: COSTS_SERIES.traditional },
-            ],
-            max,
-            tip: t(
-              '{specId} — estimación tradicional: {cost} (horas de tasks × tarifa {rate}/h)',
-              {
-                specId,
-                cost: money.format(entry.traditional),
-                rate: money.format(pricing.traditional_hourly_rate),
-              },
-            ),
-          })}
-          ${costBarRow({
-            label: t('Agéntico'),
-            valueLabel: agenticLabel,
-            segments: [{ value: entry.agentic, color: COSTS_SERIES.agentic }],
-            max,
-            tip: entry.hasUsage
-              ? t(
-                  '{specId} — costo agéntico aproximado: {cost} (tokens × tarifa por tier)',
-                  { specId, cost: money.format(entry.agentic) },
-                )
-              : t('{specId} — sin telemetría de tokens todavía', { specId }),
-          })}
-        </div>`;
-    })
-    .join('');
+const COSTS_REPO_LEVEL_KEY = '__repo__';
+
+function costsUnitRow(row, money) {
+  const tokens = row.usage.hasData
+    ? `${costsExactFormat().format(row.usage.tokensIn)} / ${costsExactFormat().format(row.usage.tokensOut)}`
+    : '—';
+  const total = row.usage.hasData
+    ? costsExactFormat().format(row.usage.tokensDisplay)
+    : '—';
+  const agentic = row.usage.hasData
+    ? money.format(row.agenticCost) + (row.tierAssumed ? ' *' : '')
+    : '—';
+  const saving = row.usage.hasData
+    ? money.format(row.traditionalCost - row.agenticCost)
+    : '—';
+  const typeBadge =
+    row.kind === 'cycle'
+      ? badge('ciclo', 'badge--sky')
+      : badge('fix', 'badge--amber');
   return `
-    <section class="card" style="margin-bottom:16px">
-      <div class="card-header"><span class="card-title">${t('Costo por spec — tradicional vs agéntico')}</span></div>
-      <p class="card-subtitle">${t('Estimación tradicional (horas × tarifa) contra el costo aproximado de tokens del modo agéntico.')}</p>
-      ${costsLegend([
-        { label: t('Tradicional'), color: COSTS_SERIES.traditional },
-        { label: t('Agéntico'), color: COSTS_SERIES.agentic },
-      ])}
-      ${blocks}
-    </section>`;
+    <tr>
+      <td><a href="${row.href}" style="color:var(--text-bright)">${escapeHtml(row.id)}</a></td>
+      <td>${typeBadge}</td>
+      <td>${escapeHtml(row.module)}</td>
+      <td style="text-align:right">${costsExactFormat().format(row.estimationHours)} h</td>
+      <td style="text-align:right">${money.format(row.traditionalCost)}</td>
+      <td style="text-align:right">${escapeHtml(tokens)}</td>
+      <td style="text-align:right">${escapeHtml(total)}</td>
+      <td>${originBadge(usageOrigin(row.usage))}</td>
+      <td style="text-align:right">${escapeHtml(agentic)}</td>
+      <td style="text-align:right">${escapeHtml(saving)}</td>
+    </tr>`;
 }
 
-function costsTokensCard(rows) {
-  const withTokens = rows.filter((row) => row.usage.hasData);
-  if (withTokens.length === 0) {
+function costsAgentsCard(rows, fixRows, pricing, money) {
+  const buckets = costsAgentAggregation(rows, fixRows, pricing);
+  if (buckets.length === 0) {
     return `
       <section class="card" style="margin-bottom:16px">
-        <div class="card-header"><span class="card-title">${t('Tokens por ciclo')}</span></div>
-        <p class="card-hint">${t('Sin telemetría todavía. Se registra al cerrar cada ciclo: <code>cycle.json → metrics.usage</code> (lo hace el sdd-reviewer) o por task en <code>tasks.json → usage</code>.')}</p>
+        <div class="card-header"><span class="card-title">${t('Consumo por agente')}</span></div>
+        <p class="card-hint">${t('Sin telemetría por agente todavía. Se registra en <code>metrics.usage.by_agent</code> de cada ciclo y en el <code>usage</code> de cada fix.')}</p>
       </section>`;
   }
-  const max = Math.max(
-    1e-9,
-    ...withTokens.map((row) => row.usage.tokensIn + row.usage.tokensOut),
-  );
-  const bars = withTokens
-    .map((row) =>
-      costBarRow({
-        label: `${shortSpecLabel(row.specId)} · ${row.cycleId}`,
-        href: '#/cycles',
-        valueLabel: costsTokensFormat().format(
-          row.usage.tokensIn + row.usage.tokensOut,
-        ),
-        segments: [
-          { value: row.usage.tokensIn, color: COSTS_SERIES.tokensIn },
-          { value: row.usage.tokensOut, color: COSTS_SERIES.tokensOut },
-        ],
-        max,
-        tip: t(
-          '{specId} {cycleId} — entrada: {tokensIn} tokens · salida: {tokensOut} tokens',
-          {
-            specId: row.specId,
-            cycleId: row.cycleId,
-            tokensIn: costsExactFormat().format(row.usage.tokensIn),
-            tokensOut: costsExactFormat().format(row.usage.tokensOut),
-          },
-        ),
-      }),
-    )
-    .join('');
-  return `
-    <section class="card" style="margin-bottom:16px">
-      <div class="card-header"><span class="card-title">${t('Tokens por ciclo')}</span></div>
-      ${costsLegend([
-        { label: t('Entrada'), color: COSTS_SERIES.tokensIn },
-        { label: t('Salida'), color: COSTS_SERIES.tokensOut },
-      ])}
-      <div style="display:grid;gap:4px">${bars}</div>
-    </section>`;
-}
-
-function costsTableCard(rows, money) {
-  const body = rows
-    .map((row) => {
-      const tokens = row.usage.hasData
-        ? `${costsExactFormat().format(row.usage.tokensIn)} / ${costsExactFormat().format(row.usage.tokensOut)}`
-        : '—';
-      const agentic = row.usage.hasData
-        ? money.format(row.agenticCost) + (row.tierAssumed ? ' *' : '')
-        : '—';
-      const saving = row.usage.hasData
-        ? money.format(row.traditionalCost - row.agenticCost)
-        : '—';
+  const body = buckets
+    .map((bucket) => {
+      const models =
+        bucket.models.size > 0 ? [...bucket.models].sort().join(', ') : '—';
       return `
         <tr>
-          <td><a href="#/cycles" style="color:var(--text-bright)">${escapeHtml(row.specId)} · ${escapeHtml(row.cycleId)}</a></td>
-          <td>${escapeHtml(row.module)}</td>
-          <td style="text-align:right">${costsExactFormat().format(row.estimationHours)} h</td>
-          <td style="text-align:right">${money.format(row.traditionalCost)}</td>
-          <td style="text-align:right">${escapeHtml(tokens)}</td>
-          <td style="text-align:right">${escapeHtml(agentic)}</td>
-          <td style="text-align:right">${escapeHtml(saving)}</td>
+          <td>${escapeHtml(costsAgentLabel(bucket))}</td>
+          <td style="text-align:right">${costsExactFormat().format(bucket.units)}</td>
+          <td>${escapeHtml(models)}</td>
+          <td style="text-align:right">${costsExactFormat().format(bucket.tokensIn)}</td>
+          <td style="text-align:right">${costsExactFormat().format(bucket.tokensOut)}</td>
+          <td style="text-align:right">${costsExactFormat().format(bucket.tokensDisplay)}</td>
+          <td>${originBadge(usageOrigin(bucket))}</td>
+          <td style="text-align:right">${escapeHtml(money.format(bucket.cost) + (bucket.assumed ? ' *' : ''))}</td>
         </tr>`;
     })
     .join('');
   return `
     <section class="card" style="margin-bottom:16px">
-      <div class="card-header"><span class="card-title">${t('Detalle por ciclo')}</span></div>
+      <div class="card-header"><span class="card-title">${t('Consumo por agente')}</span></div>
+      <p class="card-subtitle">${t('Tokens y costo agrupados por rol SDD, a partir de las entradas <code>by_agent</code> de ciclos y fixes y del <code>usage</code> por task.')}</p>
       <div class="table-wrapper"><table class="data-table">
-        <thead><tr><th>${t('Ciclo')}</th><th>${t('Módulo')}</th><th style="text-align:right">${t('Horas est.')}</th><th style="text-align:right">${t('Costo trad.')}</th><th style="text-align:right">${t('Tokens in/out')}</th><th style="text-align:right">${t('Costo agéntico')}</th><th style="text-align:right">${t('Ahorro')}</th></tr></thead>
+        <thead><tr><th>${t('Agente')}</th><th style="text-align:right">${t('Unidades')}</th><th>${t('Modelos usados')}</th><th style="text-align:right">${t('Tokens in')}</th><th style="text-align:right">${t('Tokens out')}</th><th style="text-align:right">${t('Tokens')}</th><th>${t('Origen')}</th><th style="text-align:right">${t('Costo aprox.')}</th></tr></thead>
         <tbody>${body}</tbody>
       </table></div>
     </section>`;
 }
 
 function costsProvidersCard(rows, fixRows, pricing, money) {
-  const totals = providerTotals(rows, fixRows, pricing);
-  if (totals.size === 0) {
+  const modelRows = costsModelAggregation(rows, fixRows, pricing);
+  if (modelRows.length === 0) {
     return `
       <section class="card" style="margin-bottom:16px">
-        <div class="card-header"><span class="card-title">${t('Consumo por proveedor')}</span></div>
-        <p class="card-hint">${t('Sin telemetría con proveedor declarado todavía. Las claves de {field} llevan la forma {example}.', { field: '<code>by_tier</code> / <code>model_tier</code>', example: '<code>proveedor/modelo</code> (<code>claude/opus</code>, <code>gemini/pro</code>, <code>copilot/gpt-5-mini</code>)' })}</p>
+        <div class="card-header"><span class="card-title">${t('Consumo por proveedor y modelo')}</span></div>
+        <p class="card-hint">${t('Sin telemetría con proveedor declarado todavía. Las claves de {field} llevan la forma {example}.', { field: '<code>by_agent.provider_model</code> / <code>by_tier</code>', example: '<code>proveedor/modelo</code> (<code>claude/opus</code>, <code>gemini/pro</code>, <code>copilot/gpt-5-mini</code>)' })}</p>
       </section>`;
   }
-  const body = [...totals.entries()]
-    .sort((a, b) => b[1].cost - a[1].cost)
-    .map(([provider, entry]) => {
-      const label =
-        provider === COSTS_UNTIERED
-          ? t('Sin proveedor declarado')
-          : (COSTS_PROVIDER_LABELS[provider] ?? provider);
-      const models =
-        entry.models.size > 0 ? [...entry.models].sort().join(', ') : '—';
-      const origin = entry.approx
-        ? badge(
-            entry.measured ? 'parcialmente estimado' : 'estimado',
-            'status--skipped',
-          )
-        : badge('medido', 'status--done');
-      return `
+  const groups = costsProviderGroups(modelRows);
+  const body = groups
+    .map((group) => {
+      const modelLines = group.models
+        .map(
+          (model) => `
         <tr>
-          <td>${escapeHtml(label)}</td>
-          <td>${escapeHtml(models)}</td>
-          <td>${origin}</td>
-          <td style="text-align:right">${costsExactFormat().format(entry.tokensIn)}</td>
-          <td style="text-align:right">${costsExactFormat().format(entry.tokensOut)}</td>
-          <td style="text-align:right">${money.format(entry.cost)}</td>
-        </tr>`;
+          <td>${escapeHtml(providerLabel(group.provider))}</td>
+          <td><code>${escapeHtml(costsModelShortName(model))}</code></td>
+          <td style="text-align:right">${costsExactFormat().format(model.units)}</td>
+          <td>${originBadge(usageOrigin(model))}</td>
+          <td style="text-align:right">${costsExactFormat().format(model.tokensIn)}</td>
+          <td style="text-align:right">${costsExactFormat().format(model.tokensOut)}</td>
+          <td style="text-align:right">${costsExactFormat().format(model.tokensDisplay)}</td>
+          <td style="text-align:right">${escapeHtml(money.format(model.cost) + (model.assumed ? ' *' : ''))}</td>
+        </tr>`,
+        )
+        .join('');
+      const subtotal =
+        group.models.length > 1
+          ? `
+        <tr style="background:rgb(var(--rgb-zinc-900) / 0.25)">
+          <td colspan="2" style="color:var(--text-dim)">${escapeHtml(t('Subtotal {provider}', { provider: providerLabel(group.provider) }))}</td>
+          <td style="text-align:right">${costsExactFormat().format(group.models.reduce((sum, model) => sum + model.units, 0))}</td>
+          <td>${originBadge(usageOrigin(group))}</td>
+          <td style="text-align:right">${costsExactFormat().format(group.tokensIn)}</td>
+          <td style="text-align:right">${costsExactFormat().format(group.tokensOut)}</td>
+          <td style="text-align:right">${costsExactFormat().format(group.tokensDisplay)}</td>
+          <td style="text-align:right">${escapeHtml(money.format(group.cost))}</td>
+        </tr>`
+          : '';
+      return modelLines + subtotal;
     })
     .join('');
   return `
     <section class="card" style="margin-bottom:16px">
-      <div class="card-header"><span class="card-title">${t('Consumo por proveedor')}</span></div>
-      <p class="card-subtitle">${t('Tokens y costo agéntico agregados por proveedor (ciclos + fixes), según las claves proveedor/modelo de la telemetría.')} ${t('<strong>Origen</strong>: medido = leído de un contador de la sesión; estimado = aproximación declarada por el agente (arneses sin contador, como Copilot o Antigravity).')}</p>
+      <div class="card-header"><span class="card-title">${t('Consumo por proveedor y modelo')}</span></div>
+      <p class="card-subtitle">${t('Tokens y costo agéntico por modelo completo (proveedor/modelo), con subtotal por proveedor. Incluye ciclos y fixes.')} ${t('<strong>Origen</strong>: exacto = leído de un contador de la sesión (por ejemplo <code>agent-usage-notification</code>, el conteo por subagente que reporta el arnés); estimado = aproximación declarada por el agente (arneses sin contador, como Copilot o Antigravity); mixto = mezcla de ambos.')}</p>
       <div class="table-wrapper"><table class="data-table">
-        <thead><tr><th>${t('Proveedor')}</th><th>${t('Modelos usados')}</th><th>${t('Origen')}</th><th style="text-align:right">${t('Tokens in')}</th><th style="text-align:right">${t('Tokens out')}</th><th style="text-align:right">${t('Costo aprox.')}</th></tr></thead>
-        <tbody>${body}</tbody>
-      </table></div>
-    </section>`;
-}
-
-function costsFixesCard(fixRows, money) {
-  if (fixRows.length === 0) return '';
-  const withUsage = fixRows.filter((fix) => fix.usage.hasData).length;
-  const body = fixRows
-    .map((fix) => {
-      const tokens = fix.usage.hasData
-        ? `${costsExactFormat().format(fix.usage.tokensIn)} / ${costsExactFormat().format(fix.usage.tokensOut)}`
-        : '—';
-      const agentic = fix.usage.hasData
-        ? money.format(fix.agenticCost) + (fix.tierAssumed ? ' *' : '')
-        : '—';
-      return `
-        <tr>
-          <td><a href="#/fixes" style="color:var(--text-bright)">${escapeHtml(fix.fixId)}</a></td>
-          <td>${escapeHtml(fix.title)}</td>
-          <td>${escapeHtml(fix.type)}</td>
-          <td style="text-align:right">${costsExactFormat().format(fix.estimationHours)} h</td>
-          <td style="text-align:right">${money.format(fix.traditionalCost)}</td>
-          <td style="text-align:right">${escapeHtml(tokens)}</td>
-          <td style="text-align:right">${escapeHtml(agentic)}</td>
-        </tr>`;
-    })
-    .join('');
-  return `
-    <section class="card" style="margin-bottom:16px">
-      <div class="card-header"><span class="card-title">${t('Costos de fixes')}</span></div>
-      <p class="card-subtitle">${t('{count} fixes registrados, {withUsage} con telemetría. El usage se registra al cerrar cada fix (FIX GATE).', { count: fixRows.length, withUsage })}</p>
-      <div class="table-wrapper"><table class="data-table">
-        <thead><tr><th>Fix</th><th>${t('Título')}</th><th>${t('Tipo')}</th><th style="text-align:right">${t('Horas est.')}</th><th style="text-align:right">${t('Costo trad.')}</th><th style="text-align:right">${t('Tokens in/out')}</th><th style="text-align:right">${t('Costo agéntico')}</th></tr></thead>
+        <thead><tr><th>${t('Proveedor')}</th><th>${t('Modelo')}</th><th style="text-align:right">${t('Unidades')}</th><th>${t('Origen')}</th><th style="text-align:right">${t('Tokens in')}</th><th style="text-align:right">${t('Tokens out')}</th><th style="text-align:right">${t('Tokens')}</th><th style="text-align:right">${t('Costo aprox.')}</th></tr></thead>
         <tbody>${body}</tbody>
       </table></div>
     </section>`;
@@ -7310,13 +7750,15 @@ function costsMethodologyCard(pricing, anyAssumed, money) {
       <div class="card-header"><span class="card-title">${t('Metodología y tarifas')}</span></div>
       <p class="card-hint">
         <strong>${t('Tradicional')}</strong> = ${t('Σ estimation_hours de las tasks × {rate}/h.', { rate: money.format(pricing.traditional_hourly_rate) })}
-        <strong>${t('Agéntico')}</strong> = ${t('tokens registrados × tarifa del tier (USD por millón de tokens).')}
-        ${t('La telemetría la escribe el sdd-reviewer al cerrar cada ciclo (<code>metrics.usage</code>) o los implementadores por task; es obligatoria y, cuando el arnés no expone contador, se registra como estimación declarada (<code>approx: true</code>) — nunca se omite.')}
-        ${anyAssumed ? t('* Tokens sin tier declarado se tarifan como <code>{tier}</code>.', { tier: COSTS_ASSUMED_TIER }) : ''}
+        <strong>${t('Agéntico')}</strong> = ${t('tokens registrados × tarifa del modelo (USD por millón de tokens).')}
+        ${t('Prioridad de fuentes por ciclo: <code>metrics.usage.by_agent</code> → <code>metrics.usage.by_tier</code> → <code>tasks[].usage</code> → tokens top-level de <code>metrics.usage</code>.')}
+        ${t('La telemetría la escribe cada agente al cerrar su unidad de trabajo y el sdd-reviewer la consolida al cerrar el ciclo (<code>metrics.usage</code>); es obligatoria y, cuando el arnés no expone contador, se registra como estimación declarada (<code>approx: true</code>) — nunca se omite.')}
+        ${t('<strong>Origen</strong>: exacto = leído de un contador de la sesión (por ejemplo <code>agent-usage-notification</code>, el conteo por subagente que reporta el arnés); estimado = aproximación declarada por el agente (arneses sin contador, como Copilot o Antigravity); mixto = mezcla de ambos.')}
+        ${anyAssumed ? t('* Tokens sin modelo declarado (o con un modelo sin tarifa) se tarifan como <code>{tier}</code>.', { tier: COSTS_ASSUMED_TIER }) : ''}
         ${pricing.missing ? t('No hay <code>sdd/pricing.json</code> — usando tarifas por defecto del kit.') : t('Tarifas editables en <code>sdd/pricing.json</code>.')}
       </p>
       <div class="table-wrapper"><table class="data-table">
-        <thead><tr><th>Tier</th><th style="text-align:right">Input /MTok</th><th style="text-align:right">Output /MTok</th></tr></thead>
+        <thead><tr><th>${t('Modelo')}</th><th style="text-align:right">Input /MTok</th><th style="text-align:right">Output /MTok</th></tr></thead>
         <tbody>${tierRows}</tbody>
       </table></div>
     </section>`;
@@ -7352,102 +7794,1178 @@ function attachCostsTooltip(container) {
   });
 }
 
-async function renderCosts(container) {
-  const { pricing, rows, fixRows } = await loadCostsData();
-  const money = costsMoneyFormatter(pricing.currency ?? 'USD');
+// ─── Costs: tabs, chart primitives and the four sub-views ─────────────────────
+// Charts are inline SVG on purpose: the viewer runs offline and ships no libraries.
+// Marks follow the same spec everywhere — thin bars (≤ 24px) with a rounded data-end,
+// 2px surface gaps between stacked segments, hairline gridlines, and every value also
+// reachable in a table (the tooltip never gates a number).
 
-  if (rows.length === 0 && fixRows.length === 0) {
-    container.innerHTML = `
-      ${pageHeader({
-        title: t('Costos'),
-        subtitle: t(
-          'Tokens, tiempos y comparativa de costos del modo agéntico contra la estimación tradicional.',
-        ),
-      })}
-      ${emptyState(
-        t('Sin ciclos todavía'),
-        t(
-          'Cuando el loop SDD complete ciclos con tasks estimadas y telemetría de tokens, el tablero aparece acá.',
-        ),
-      )}`;
-    return;
+const COSTS_TABS = [
+  { id: 'general', label: 'General' },
+  { id: 'specs', label: 'Specs' },
+  { id: 'fixes', label: 'Fixes' },
+  { id: 'rtk', label: 'RTK' },
+];
+const COSTS_DEFAULT_TAB = 'general';
+const COSTS_TABLE_ROWS_VISIBLE = 8;
+
+/** Ordered categorical palette (dark surface), validated with the dataviz six checks. */
+const VIZ_CATEGORICAL = Object.freeze([
+  '#3987e5',
+  '#d95926',
+  '#199e70',
+  '#c98500',
+  '#d55181',
+  '#008300',
+  '#9085e9',
+  '#e66767',
+]);
+const VIZ_OTHER = '#71717a';
+const VIZ_MAX_SLICES = 6;
+const RTK_SERIES = Object.freeze({ saved: '#059669', read: '#0284c7' });
+
+/** Colour follows the entity, never its rank: a filter must not repaint the survivors. */
+const VIZ_AGENT_SLOT = {
+  'implementor-front': 0,
+  'implementor-back': 1,
+  architect: 2,
+  reviewer: 3,
+  planner: 4,
+  functional: 5,
+  orchestrator: 6,
+  steward: 7,
+  hermes: 7,
+};
+const VIZ_PROVIDER_SLOT = { claude: 0, gemini: 1, copilot: 2 };
+const VIZ_STATUS_TONE = {
+  emerald: '#059669',
+  teal: '#0d9488',
+  amber: '#d97706',
+  orange: '#ea580c',
+  sky: '#0284c7',
+  zinc: '#71717a',
+  'zinc-mute': '#52525b',
+  rose: '#e11d48',
+  red: '#dc2626',
+};
+
+function vizAgentColor(agent) {
+  const slot = VIZ_AGENT_SLOT[agent];
+  return slot === undefined ? VIZ_OTHER : VIZ_CATEGORICAL[slot];
+}
+
+function vizProviderColor(provider, index) {
+  const slot = VIZ_PROVIDER_SLOT[provider];
+  return VIZ_CATEGORICAL[(slot === undefined ? 3 + index : slot) % VIZ_CATEGORICAL.length];
+}
+
+function vizStatusColor(status) {
+  return VIZ_STATUS_TONE[STATUS_META[status]?.tone] ?? VIZ_OTHER;
+}
+
+function costsTabBar(active) {
+  return `
+    <nav class="costs-tabs" role="tablist" aria-label="${escapeHtml(t('Vistas de costos'))}">
+      ${COSTS_TABS.map(
+        (tab) =>
+          `<a class="pill${tab.id === active ? ' pill--active' : ''}" role="tab" aria-selected="${tab.id === active}" href="#/costs/${tab.id}" data-costs-tab="${tab.id}">${escapeHtml(t(tab.label))}</a>`,
+      ).join('')}
+    </nav>`;
+}
+
+function costsSectionCard({ title, subtitle, body, hint, grid = false }) {
+  return `
+    <section class="card${grid ? ' costs-grid-item' : ''}"${grid ? '' : ' style="margin-bottom:16px"'}>
+      <div class="card-header"><span class="card-title">${escapeHtml(title)}</span></div>
+      ${subtitle ? `<p class="card-subtitle" style="margin-bottom:12px">${subtitle}</p>` : ''}
+      ${body}
+      ${hint ? `<p class="card-hint" style="margin-top:10px">${hint}</p>` : ''}
+    </section>`;
+}
+
+/** Fixed-height table: the header stays put, the body scrolls. Row count is in the caption. */
+function scrollTable({ head, body, rows, caption }) {
+  const tall = rows > COSTS_TABLE_ROWS_VISIBLE;
+  return `
+    ${caption ? `<p class="card-hint" style="margin-bottom:8px">${caption}</p>` : ''}
+    <div class="table-wrapper${tall ? ' table-wrapper--scroll' : ''}"><table class="data-table">
+      <thead><tr>${head}</tr></thead>
+      <tbody>${body}</tbody>
+    </table></div>`;
+}
+
+function vizNiceMax(value) {
+  if (!(value > 0)) return 1;
+  const magnitude = 10 ** Math.floor(Math.log10(value));
+  const normalized = value / magnitude;
+  const step = normalized <= 1 ? 1 : normalized <= 2 ? 2 : normalized <= 5 ? 5 : 10;
+  return step * magnitude;
+}
+
+function vizRoundedTopRect(x, y, width, height, radius) {
+  const r = Math.min(radius, width / 2, height);
+  if (r <= 0) return `M${x} ${y}h${width}v${height}h${-width}Z`;
+  return `M${x} ${y + r}q0 ${-r} ${r} ${-r}h${width - 2 * r}q${r} 0 ${r} ${r}v${height - r}h${-width}Z`;
+}
+
+function vizRoundedRightRect(x, y, width, height, radius) {
+  const r = Math.min(radius, height / 2, width);
+  if (r <= 0) return `M${x} ${y}h${width}v${height}h${-width}Z`;
+  return `M${x} ${y}h${width - r}q${r} 0 ${r} ${r}v${height - 2 * r}q0 ${r} ${-r} ${r}h${-(width - r)}Z`;
+}
+
+/** Periodic x labels plus the last one — unless the last would sit on top of a periodic one. */
+function vizShowsXLabel(index, count, every) {
+  const last = count - 1;
+  if (index === last) return true;
+  if (index % every !== 0) return false;
+  return every === 1 || last - index >= Math.ceil(every / 2);
+}
+
+function vizLegend(entries) {
+  return `<div class="viz-legend">${entries
+    .map(
+      ({ label, color, value }) => `
+        <span class="viz-legend-item">
+          <span class="viz-swatch" style="background:${color}" aria-hidden="true"></span>
+          <span>${escapeHtml(label)}</span>
+          ${value !== undefined ? `<span class="viz-legend-value">${escapeHtml(String(value))}</span>` : ''}
+        </span>`,
+    )
+    .join('')}</div>`;
+}
+
+/**
+ * Columns over an ordered axis (days, months, categories). `points[].values` aligns with
+ * `series`; `mode` stacks them (part-to-whole per slot) or groups them side by side (two
+ * measures of the same unit). A slot-wide transparent hit rect carries the tooltip so the
+ * reader aims at the slot, not at a 2px column. `labels` prints the value on each cap —
+ * only for short categorical axes where the disparity between series is the story.
+ */
+function vizColumns({
+  points,
+  series,
+  format,
+  height = 190,
+  width = 640,
+  xLabelEvery,
+  mode = 'stacked',
+  labels = false,
+}) {
+  const padLeft = 44;
+  const padRight = 8;
+  const padTop = labels ? 18 : 8;
+  const padBottom = 24;
+  const plotW = width - padLeft - padRight;
+  const plotH = height - padTop - padBottom;
+  const grouped = mode === 'grouped';
+  const totals = points.map((point) =>
+    grouped
+      ? Math.max(0, ...point.values)
+      : point.values.reduce((sum, value) => sum + (value > 0 ? value : 0), 0),
+  );
+  const max = vizNiceMax(Math.max(0, ...totals));
+  const slot = points.length > 0 ? plotW / points.length : plotW;
+  const perSlot = grouped ? series.length : 1;
+  const barW = Math.max(3, Math.min(24, (slot * 0.68 - (perSlot - 1) * 2) / perSlot));
+  const groupW = barW * perSlot + (perSlot - 1) * 2;
+  const ticks = 4;
+  const every = xLabelEvery ?? Math.max(1, Math.ceil(points.length / 8));
+
+  const gridlines = Array.from({ length: ticks + 1 }, (_, index) => {
+    const y = padTop + plotH - (plotH * index) / ticks;
+    const value = (max * index) / ticks;
+    return `
+      <line x1="${padLeft}" x2="${width - padRight}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" class="viz-grid" />
+      <text x="${padLeft - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end" class="viz-tick">${escapeHtml(format(value))}</text>`;
+  }).join('');
+
+  const capLabel = (x, top, value) =>
+    labels && value > 0
+      ? `<text x="${x.toFixed(1)}" y="${(top - 4).toFixed(1)}" text-anchor="middle" class="viz-tick viz-tick--value">${escapeHtml(format(value))}</text>`
+      : '';
+
+  const columns = points
+    .map((point, index) => {
+      const groupX = padLeft + slot * index + (slot - groupW) / 2;
+      let marks = '';
+      if (grouped) {
+        let previousLabelTop = null;
+        marks = point.values
+          .map((value, seriesIndex) => {
+            if (!(value > 0)) return '';
+            const h = Math.max(1, (value / max) * plotH);
+            const x = groupX + seriesIndex * (barW + 2);
+            const top = padTop + plotH - h;
+            // Two short neighbours would print their values on the same line: stagger.
+            const labelTop =
+              previousLabelTop !== null && Math.abs(previousLabelTop - top) < 14
+                ? previousLabelTop - 12
+                : top;
+            previousLabelTop = labelTop;
+            return `<path d="${vizRoundedTopRect(x, top, barW, h, 4)}" fill="${series[seriesIndex].color}" />${capLabel(x + barW / 2, labelTop, value)}`;
+          })
+          .join('');
+      } else {
+        let cursor = padTop + plotH;
+        marks = point.values
+          .map((value, seriesIndex) => {
+            if (!(value > 0)) return '';
+            const h = (value / max) * plotH;
+            const isTop = point.values.slice(seriesIndex + 1).every((v) => !(v > 0));
+            const gap = isTop ? 0 : 2;
+            const top = cursor - h;
+            const body = isTop
+              ? vizRoundedTopRect(groupX, top, barW, h, 4)
+              : `M${groupX} ${top + gap}h${barW}v${h - gap}h${-barW}Z`;
+            cursor = top;
+            return `<path d="${body}" fill="${series[seriesIndex].color}" />${isTop ? capLabel(groupX + barW / 2, top, totals[index]) : ''}`;
+          })
+          .join('');
+      }
+      const label = vizShowsXLabel(index, points.length, every)
+        ? `<text x="${(padLeft + slot * index + slot / 2).toFixed(1)}" y="${height - 8}" text-anchor="middle" class="viz-tick">${escapeHtml(point.label)}</text>`
+        : '';
+      return `
+        <g class="viz-col">
+          ${marks}
+          ${label}
+          <rect x="${(padLeft + slot * index).toFixed(1)}" y="${padTop}" width="${slot.toFixed(1)}" height="${plotH}" fill="transparent" data-cost-tip="${escapeHtml(point.tip)}" />
+        </g>`;
+    })
+    .join('');
+
+  return `
+    <svg class="viz-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(t('Gráfico de columnas'))}">
+      ${gridlines}
+      <line x1="${padLeft}" x2="${width - padRight}" y1="${padTop + plotH}" y2="${padTop + plotH}" class="viz-axis" />
+      ${columns}
+    </svg>`;
+}
+
+/** Single-series line with a soft area wash; the end marker carries a 2px surface ring. */
+function vizLine({ points, color, format, height = 170, width = 640 }) {
+  const padLeft = 44;
+  const padRight = 12;
+  const padTop = 10;
+  const padBottom = 24;
+  const plotW = width - padLeft - padRight;
+  const plotH = height - padTop - padBottom;
+  const max = vizNiceMax(Math.max(0, ...points.map((point) => point.value)));
+  const step = points.length > 1 ? plotW / (points.length - 1) : 0;
+  const coords = points.map((point, index) => ({
+    x: padLeft + step * index,
+    y: padTop + plotH - (Math.max(0, point.value) / max) * plotH,
+  }));
+  const ticks = 4;
+  const gridlines = Array.from({ length: ticks + 1 }, (_, index) => {
+    const y = padTop + plotH - (plotH * index) / ticks;
+    return `
+      <line x1="${padLeft}" x2="${width - padRight}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" class="viz-grid" />
+      <text x="${padLeft - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end" class="viz-tick">${escapeHtml(format((max * index) / ticks))}</text>`;
+  }).join('');
+  const linePath = coords
+    .map((c, index) => `${index === 0 ? 'M' : 'L'}${c.x.toFixed(1)} ${c.y.toFixed(1)}`)
+    .join('');
+  const areaPath =
+    coords.length > 1
+      ? `${linePath}L${coords[coords.length - 1].x.toFixed(1)} ${padTop + plotH}L${coords[0].x.toFixed(1)} ${padTop + plotH}Z`
+      : '';
+  const every = Math.max(1, Math.ceil(points.length / 8));
+  const labels = points
+    .map((point, index) =>
+      vizShowsXLabel(index, points.length, every)
+        ? `<text x="${coords[index].x.toFixed(1)}" y="${height - 8}" text-anchor="middle" class="viz-tick">${escapeHtml(point.label)}</text>`
+        : '',
+    )
+    .join('');
+  const hits = points
+    .map((point, index) => {
+      const left = index === 0 ? padLeft : coords[index].x - step / 2;
+      return `<rect x="${left.toFixed(1)}" y="${padTop}" width="${(step || plotW).toFixed(1)}" height="${plotH}" fill="transparent" data-cost-tip="${escapeHtml(point.tip)}" />`;
+    })
+    .join('');
+  const last = coords[coords.length - 1];
+  return `
+    <svg class="viz-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(t('Gráfico de línea'))}">
+      ${gridlines}
+      ${areaPath ? `<path d="${areaPath}" fill="${color}" fill-opacity="0.1" />` : ''}
+      <path d="${linePath}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+      ${last ? `<circle cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="4" fill="${color}" stroke="var(--bg)" stroke-width="2" />` : ''}
+      ${labels}
+      ${hits}
+    </svg>`;
+}
+
+/**
+ * Part-to-whole as ONE horizontal stacked bar (never a pie): segments beyond the sixth
+ * fold into "Otros", 2px surface gaps separate neighbours, the legend carries the values.
+ */
+function vizShareBar({ segments, format }) {
+  const positive = segments.filter((segment) => segment.value > 0);
+  const total = positive.reduce((sum, segment) => sum + segment.value, 0);
+  if (total <= 0) {
+    return `<p class="card-hint">${t('Sin datos para graficar todavía.')}</p>`;
   }
+  const sorted = [...positive].sort((a, b) => b.value - a.value);
+  const kept = sorted.slice(0, VIZ_MAX_SLICES);
+  const rest = sorted.slice(VIZ_MAX_SLICES);
+  if (rest.length > 0) {
+    kept.push({
+      label: t('Otros ({count})', { count: rest.length }),
+      value: rest.reduce((sum, segment) => sum + segment.value, 0),
+      color: VIZ_OTHER,
+    });
+  }
+  const parts = kept
+    .map((segment, index) => {
+      const pct = (segment.value / total) * 100;
+      const tip = `${segment.label}: ${format(segment.value)} (${pct.toFixed(1)}%)`;
+      return `<span class="viz-share-seg" style="width:${pct.toFixed(2)}%;background:${segment.color}${index === kept.length - 1 ? ';border-radius:0 4px 4px 0' : ''}" data-cost-tip="${escapeHtml(tip)}"></span>`;
+    })
+    .join('');
+  return `
+    <div class="viz-share" role="img" aria-label="${escapeHtml(t('Distribución'))}">${parts}</div>
+    ${vizLegend(
+      kept.map((segment) => ({
+        label: segment.label,
+        color: segment.color,
+        value: `${format(segment.value)} · ${((segment.value / total) * 100).toFixed(0)}%`,
+      })),
+    )}`;
+}
 
-  const totals = [...rows, ...fixRows].reduce(
+/** Horizontal bars for one measure across categories: a single hue, value at the tip. */
+function vizBarList({ rows, format, color, maxRows = 12 }) {
+  const shown = rows.slice(0, maxRows);
+  const max = Math.max(1e-9, ...shown.map((row) => row.value));
+  return `<div style="display:grid;gap:4px">${shown
+    .map((row) =>
+      costBarRow({
+        label: row.label,
+        href: row.href,
+        valueLabel: row.valueLabel ?? format(row.value),
+        segments: [{ value: row.value, color: row.color ?? color }],
+        max,
+        tip: row.tip ?? `${row.label}: ${format(row.value)}`,
+      }),
+    )
+    .join('')}</div>${
+    rows.length > shown.length
+      ? `<p class="card-hint" style="margin-top:8px">${t('Se muestran {shown} de {total}; el resto está en la tabla.', { shown: shown.length, total: rows.length })}</p>`
+      : ''
+  }`;
+}
+
+function costsKpiRow(cells) {
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-bottom:20px">${cells.join('')}</div>`;
+}
+
+function costsTotals(units) {
+  const totals = units.reduce(
     (acc, row) => {
       acc.hours += row.estimationHours;
       acc.traditional += row.traditionalCost;
-      acc.tokens += row.usage.tokensIn + row.usage.tokensOut;
+      acc.tokens += row.usage.tokensDisplay;
       acc.agentic += row.agenticCost;
       acc.hasUsage ||= row.usage.hasData;
       acc.anyAssumed ||= row.tierAssumed;
       return acc;
     },
-    {
-      hours: 0,
-      traditional: 0,
-      tokens: 0,
-      agentic: 0,
-      hasUsage: false,
-      anyAssumed: false,
-    },
+    { hours: 0, traditional: 0, tokens: 0, agentic: 0, hasUsage: false, anyAssumed: false },
   );
-  const saving = totals.traditional - totals.agentic;
-  const savingPct =
-    totals.traditional > 0 ? Math.round((saving / totals.traditional) * 100) : 0;
+  totals.saving = totals.traditional - totals.agentic;
+  totals.savingPct =
+    totals.traditional > 0
+      ? Math.round((totals.saving / totals.traditional) * 100)
+      : 0;
+  return totals;
+}
 
-  const kpis = [
+function costsHeadlineKpis(totals, money, hrefs) {
+  return [
     dashboardStatCell({
       value: `${costsExactFormat().format(totals.hours)} h`,
       label: t('Horas estimadas'),
-      href: '#/tasks',
+      href: hrefs.hours,
     }),
     dashboardStatCell({
       value: money.format(totals.traditional),
       label: t('Costo tradicional'),
-      href: '#/tasks',
+      href: hrefs.hours,
     }),
     dashboardStatCell({
       value: totals.hasUsage ? costsTokensFormat().format(totals.tokens) : '—',
       label: t('Tokens consumidos'),
-      href: '#/cycles',
+      href: hrefs.usage,
     }),
     dashboardStatCell({
       value: totals.hasUsage ? money.format(totals.agentic) : '—',
       label: t('Costo agéntico aprox.'),
-      href: '#/cycles',
+      href: hrefs.usage,
     }),
     dashboardStatCell({
-      value: totals.hasUsage ? money.format(saving) : '—',
+      value: totals.hasUsage ? money.format(totals.saving) : '—',
       label: t('Ahorro proyectado'),
-      href: '#/cycles',
-      accent: totals.hasUsage && saving > 0,
-      sub: totals.hasUsage ? t('{pct}% menos', { pct: savingPct }) : '',
+      href: hrefs.usage,
+      accent: totals.hasUsage && totals.saving > 0,
+      sub: totals.hasUsage ? t('{pct}% menos', { pct: totals.savingPct }) : '',
     }),
-  ].join('');
+  ];
+}
 
+// ─── General ────────────────────────────────────────────────────────────────
+
+function costsTraditionalVsAgenticCard(rows, fixRows, pricing, money) {
+  const bySpec = new Map();
+  const bucketFor = (key) => {
+    const entry = bySpec.get(key) ?? { traditional: 0, agentic: 0, hasUsage: false };
+    bySpec.set(key, entry);
+    return entry;
+  };
+  for (const row of rows) {
+    const entry = bucketFor(row.specId);
+    entry.traditional += row.traditionalCost;
+    entry.agentic += row.agenticCost;
+    entry.hasUsage ||= row.usage.hasData;
+  }
+  for (const fix of fixRows) {
+    const entry = bucketFor(fix.specId ?? COSTS_REPO_LEVEL_KEY);
+    entry.traditional += fix.traditionalCost;
+    entry.agentic += fix.agenticCost;
+    entry.hasUsage ||= fix.usage.hasData;
+  }
+  const labels = [...bySpec.keys()];
+  const points = labels.map((key) => {
+    const entry = bySpec.get(key);
+    const label = key === COSTS_REPO_LEVEL_KEY ? t('Fixes globales') : shortSpecLabel(key);
+    return {
+      label: label.length > 14 ? `${label.slice(0, 13)}…` : label,
+      values: [entry.traditional, entry.agentic],
+      tip: `${key === COSTS_REPO_LEVEL_KEY ? t('Fixes globales (sin spec asociada)') : key} — ${t('Tradicional')}: ${money.format(entry.traditional)} · ${t('Agéntico')}: ${entry.hasUsage ? money.format(entry.agentic) : '—'}`,
+    };
+  });
+  // Two measures of the same unit (money) side by side per spec; the gap between them IS
+  // the story, so every cap carries its value (an agentic column is often too short to see).
+  const body =
+    points.length === 0
+      ? `<p class="card-hint">${t('Sin datos para graficar todavía.')}</p>`
+      : `${vizLegend([
+          { label: t('Tradicional'), color: COSTS_SERIES.traditional },
+          { label: t('Agéntico'), color: COSTS_SERIES.agentic },
+        ])}${vizColumns({
+          points,
+          series: [
+            { label: t('Tradicional'), color: COSTS_SERIES.traditional },
+            { label: t('Agéntico'), color: COSTS_SERIES.agentic },
+          ],
+          format: (value) => money.format(value),
+          mode: 'grouped',
+          labels: true,
+          height: 210,
+          xLabelEvery: 1,
+        })}`;
+  return costsSectionCard({
+    title: t('Costo por spec — tradicional vs agéntico'),
+    subtitle: t(
+      'Estimación tradicional (horas × tarifa) contra el costo aproximado de tokens del modo agéntico. Incluye ciclos y fixes.',
+    ),
+    body,
+  });
+}
+
+function costsAgentShareCard(rows, fixRows, pricing, money) {
+  const buckets = costsAgentAggregation(rows, fixRows, pricing);
+  const segments = buckets.map((bucket) => ({
+    label: costsAgentLabel(bucket),
+    value: bucket.cost,
+    color: vizAgentColor(bucket.agent),
+  }));
+  return costsSectionCard({
+    grid: true,
+    title: t('Costo agéntico por agente'),
+    subtitle: t('Qué parte del gasto se lleva cada rol SDD.'),
+    body: vizShareBar({ segments, format: (value) => money.format(value) }),
+  });
+}
+
+function costsProviderShareCard(rows, fixRows, pricing) {
+  const groups = costsProviderGroups(costsModelAggregation(rows, fixRows, pricing));
+  const segments = groups.map((group, index) => ({
+    label: providerLabel(group.provider),
+    value: group.tokensDisplay,
+    color: vizProviderColor(group.provider, index),
+  }));
+  return costsSectionCard({
+    grid: true,
+    title: t('Tokens por proveedor'),
+    subtitle: t('Reparto de los tokens registrados entre proveedores.'),
+    body: vizShareBar({ segments, format: (value) => costsTokensFormat().format(value) }),
+  });
+}
+
+function costsOriginCard(rows, fixRows) {
+  let exact = 0;
+  let approx = 0;
+  for (const row of [...rows, ...fixRows]) {
+    exact += row.usage.exactUnits;
+    approx += row.usage.approxUnits;
+  }
+  return costsSectionCard({
+    grid: true,
+    title: t('Origen de la telemetría'),
+    subtitle: t('Registros leídos de un contador real contra estimaciones declaradas por el agente.'),
+    body: vizShareBar({
+      segments: [
+        { label: t('Exacto'), value: exact, color: COSTS_SERIES.agentic },
+        { label: t('Estimado'), value: approx, color: COSTS_SERIES.tokensOut },
+      ],
+      format: (value) => t('{count} registros', { count: costsExactFormat().format(value) }),
+    }),
+  });
+}
+
+async function renderCostsGeneral(container, data) {
+  const { pricing, rows, fixRows, money } = data;
+  const totals = costsTotals([...rows, ...fixRows]);
   container.innerHTML = `
+    ${costsPageHeader(data, 'general')}
+    ${costsKpiRow(costsHeadlineKpis(totals, money, { hours: '#/tasks', usage: '#/costs/specs' }))}
+    ${costsTraditionalVsAgenticCard(rows, fixRows, pricing, money)}
+    <div class="costs-grid">
+      ${costsAgentShareCard(rows, fixRows, pricing, money)}
+      ${costsProviderShareCard(rows, fixRows, pricing)}
+      ${costsOriginCard(rows, fixRows)}
+    </div>
+    ${costsAgentsCard(rows, fixRows, pricing, money)}
+    ${costsProvidersCard(rows, fixRows, pricing, money)}
+    ${costsMethodologyCard(pricing, totals.anyAssumed, money)}
+  `;
+}
+
+// ─── Specs ──────────────────────────────────────────────────────────────────
+
+function costsSpecComparisonCard(rows, money) {
+  const bySpec = new Map();
+  for (const row of rows) {
+    const entry = bySpec.get(row.specId) ?? { traditional: 0, agentic: 0, hasUsage: false, cycles: 0 };
+    entry.traditional += row.traditionalCost;
+    entry.agentic += row.agenticCost;
+    entry.hasUsage ||= row.usage.hasData;
+    entry.cycles += 1;
+    bySpec.set(row.specId, entry);
+  }
+  const max = Math.max(1e-9, ...[...bySpec.values()].flatMap((e) => [e.traditional, e.agentic]));
+  const blocks = [...bySpec.entries()]
+    .map(
+      ([specId, entry]) => `
+        <div style="display:grid;gap:2px;margin-bottom:14px">
+          <a href="#/cycles" style="font-family:var(--font-mono);font-size:var(--text-12);color:var(--text-strong);text-decoration:none;margin-bottom:2px">${escapeHtml(specId)} <span style="color:var(--text-faint)">· ${escapeHtml(t('{count} ciclo{suffix}', { count: entry.cycles, suffix: entry.cycles === 1 ? '' : 's' }))}</span></a>
+          ${costBarRow({
+            label: t('Tradicional'),
+            valueLabel: money.format(entry.traditional),
+            segments: [{ value: entry.traditional, color: COSTS_SERIES.traditional }],
+            max,
+            tip: `${specId} — ${t('Tradicional')}: ${money.format(entry.traditional)}`,
+          })}
+          ${costBarRow({
+            label: t('Agéntico'),
+            valueLabel: entry.hasUsage ? money.format(entry.agentic) : '—',
+            segments: [{ value: entry.agentic, color: COSTS_SERIES.agentic }],
+            max,
+            tip: entry.hasUsage
+              ? `${specId} — ${t('Agéntico')}: ${money.format(entry.agentic)}`
+              : t('{specId} — sin telemetría de tokens todavía', { specId }),
+          })}
+        </div>`,
+    )
+    .join('');
+  return costsSectionCard({
+    title: t('Costo por spec — solo ciclos'),
+    subtitle: t('Horas estimadas de las tasks contra los tokens registrados en cada ciclo de la spec.'),
+    body: `${vizLegend([
+      { label: t('Tradicional'), color: COSTS_SERIES.traditional },
+      { label: t('Agéntico'), color: COSTS_SERIES.agentic },
+    ])}${blocks || `<p class="card-hint">${t('Sin datos para graficar todavía.')}</p>`}`,
+  });
+}
+
+function costsCycleTokensChartCard(rows) {
+  const withTokens = rows.filter((row) => row.usage.hasData);
+  if (withTokens.length === 0) {
+    return costsSectionCard({
+      title: t('Tokens por ciclo'),
+      body: `<p class="card-hint">${t('Sin telemetría todavía. Se registra al cerrar cada ciclo: <code>cycle.json → metrics.usage</code> (lo hace el sdd-reviewer) o por task en <code>tasks.json → usage</code>.')}</p>`,
+    });
+  }
+  const points = withTokens.map((row) => ({
+    label: `${shortSpecLabel(row.specId).slice(0, 10)}·${row.cycleId.replace('cycle-', 'c')}`,
+    values: [row.usage.tokensIn, row.usage.tokensOut],
+    tip: t('{specId} {cycleId} — entrada: {tokensIn} tokens · salida: {tokensOut} tokens', {
+      specId: row.specId,
+      cycleId: row.cycleId,
+      tokensIn: costsExactFormat().format(row.usage.tokensIn),
+      tokensOut: costsExactFormat().format(row.usage.tokensOut),
+    }),
+  }));
+  return costsSectionCard({
+    title: t('Tokens por ciclo'),
+    subtitle: t('Entrada y salida apiladas por ciclo, en orden de spec.'),
+    body: `${vizLegend([
+      { label: t('Entrada'), color: COSTS_SERIES.tokensIn },
+      { label: t('Salida'), color: COSTS_SERIES.tokensOut },
+    ])}${vizColumns({
+      points,
+      series: [
+        { label: t('Entrada'), color: COSTS_SERIES.tokensIn },
+        { label: t('Salida'), color: COSTS_SERIES.tokensOut },
+      ],
+      format: (value) => costsTokensFormat().format(value),
+      xLabelEvery: Math.max(1, Math.ceil(points.length / 10)),
+    })}`,
+  });
+}
+
+function costsUnitsTable(units, money, caption) {
+  return scrollTable({
+    head: `<th>${t('Unidad')}</th><th>${t('Tipo')}</th><th>${t('Módulo')}</th><th style="text-align:right">${t('Horas est.')}</th><th style="text-align:right">${t('Costo trad.')}</th><th style="text-align:right">${t('Tokens in/out')}</th><th style="text-align:right">${t('Tokens')}</th><th>${t('Origen')}</th><th style="text-align:right">${t('Costo agéntico')}</th><th style="text-align:right">${t('Ahorro')}</th>`,
+    body: units.map((row) => costsUnitRow(row, money)).join(''),
+    rows: units.length,
+    caption,
+  });
+}
+
+async function renderCostsSpecs(container, data) {
+  const { rows, money } = data;
+  const totals = costsTotals(rows);
+  const specCount = new Set(rows.map((row) => row.specId)).size;
+  const kpis = [
+    dashboardStatCell({ value: String(specCount), label: t('Specs con ciclos'), href: '#/specs' }),
+    dashboardStatCell({ value: String(rows.length), label: t('Ciclos'), href: '#/cycles' }),
+    ...costsHeadlineKpis(totals, money, { hours: '#/tasks', usage: '#/cycles' }),
+  ];
+  const empty =
+    rows.length === 0
+      ? emptyState(
+          t('Sin ciclos todavía'),
+          t('Cuando el loop SDD complete ciclos con tasks estimadas y telemetría de tokens, el tablero aparece acá.'),
+        )
+      : '';
+  container.innerHTML = `
+    ${costsPageHeader(data, 'specs')}
+    ${costsKpiRow(kpis)}
+    ${empty}
+    ${rows.length > 0 ? costsSpecComparisonCard(rows, money) : ''}
+    ${rows.length > 0 ? costsCycleTokensChartCard(rows) : ''}
+    ${
+      rows.length > 0
+        ? costsSectionCard({
+            title: t('Detalle por ciclo'),
+            body: costsUnitsTable(
+              rows,
+              money,
+              t('{count} ciclos. La tabla tiene alto fijo: desplazá dentro de ella.', { count: rows.length }),
+            ),
+          })
+        : ''
+    }
+  `;
+}
+
+// ─── Fixes ──────────────────────────────────────────────────────────────────
+
+const FIX_SEVERITY_ORDER = ['critical', 'high', 'medium', 'low'];
+const FIX_SEVERITY_LABELS = { critical: 'Crítica', high: 'Alta', medium: 'Media', low: 'Baja' };
+
+function costsFixesByTypeCard(fixRows, money) {
+  const byType = new Map();
+  for (const fix of fixRows) {
+    const entry = byType.get(fix.type) ?? { traditional: 0, agentic: 0, count: 0 };
+    entry.traditional += fix.traditionalCost;
+    entry.agentic += fix.agenticCost;
+    entry.count += 1;
+    byType.set(fix.type, entry);
+  }
+  const points = [...byType.entries()].map(([type, entry]) => ({
+    label: `${type} (${entry.count})`,
+    values: [entry.traditional, entry.agentic],
+    tip: `${type} (${entry.count}) — ${t('Tradicional')}: ${money.format(entry.traditional)} · ${t('Agéntico')}: ${money.format(entry.agentic)}`,
+  }));
+  return costsSectionCard({
+    title: t('Costo por tipo de fix'),
+    subtitle: t('Tradicional contra agéntico, agrupado por HOTFIX / BUGFIX / FIX.'),
+    body: `${vizLegend([
+      { label: t('Tradicional'), color: COSTS_SERIES.traditional },
+      { label: t('Agéntico'), color: COSTS_SERIES.agentic },
+    ])}${vizColumns({
+      points,
+      series: [
+        { label: t('Tradicional'), color: COSTS_SERIES.traditional },
+        { label: t('Agéntico'), color: COSTS_SERIES.agentic },
+      ],
+      format: (value) => money.format(value),
+      mode: 'grouped',
+      labels: true,
+      height: 200,
+      xLabelEvery: 1,
+    })}`,
+  });
+}
+
+function costsFixesBySeverityCard(fixRows) {
+  const counts = new Map();
+  for (const fix of fixRows) {
+    const key = FIX_SEVERITY_ORDER.includes(fix.severity) ? fix.severity : 'other';
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  const rows = [...FIX_SEVERITY_ORDER, 'other']
+    .filter((key) => counts.has(key))
+    .map((key) => ({
+      label: key === 'other' ? t('Sin severidad') : t(FIX_SEVERITY_LABELS[key]),
+      value: counts.get(key),
+      href: '#/fixes',
+    }));
+  return costsSectionCard({
+    grid: true,
+    title: t('Fixes por severidad'),
+    subtitle: t('Cuántos fixes entraron por cada nivel.'),
+    body: vizBarList({
+      rows,
+      color: COSTS_SERIES.tokensOut,
+      format: (value) => costsExactFormat().format(value),
+    }),
+  });
+}
+
+function costsFixesStatusCard(fixRows) {
+  const counts = new Map();
+  for (const fix of fixRows) counts.set(fix.status, (counts.get(fix.status) ?? 0) + 1);
+  const segments = [...counts.entries()].map(([status, count]) => ({
+    label: STATUS_META[status]?.label ? t(STATUS_META[status].label) : status,
+    value: count,
+    color: vizStatusColor(status),
+  }));
+  return costsSectionCard({
+    grid: true,
+    title: t('Fixes por estado'),
+    subtitle: t('Pendientes, en curso y cerrados.'),
+    body: vizShareBar({ segments, format: (value) => costsExactFormat().format(value) }),
+  });
+}
+
+function costsFixesTokensCard(fixRows) {
+  const withTokens = fixRows.filter((fix) => fix.usage.hasData);
+  const rows = withTokens
+    .map((fix) => ({
+      label: fix.id,
+      href: '#/fixes',
+      value: fix.usage.tokensDisplay,
+      tip: `${fix.id} — ${fix.title} · ${costsExactFormat().format(fix.usage.tokensDisplay)} tokens`,
+    }))
+    .sort((a, b) => b.value - a.value);
+  return costsSectionCard({
+    title: t('Tokens por fix'),
+    subtitle: t('Los fixes que más tokens consumieron, de mayor a menor.'),
+    body:
+      rows.length === 0
+        ? `<p class="card-hint">${t('Sin telemetría por fix todavía. Se registra en el <code>usage</code> de cada fix al cerrarlo.')}</p>`
+        : vizBarList({ rows, color: COSTS_SERIES.agentic, format: (value) => costsTokensFormat().format(value) }),
+  });
+}
+
+async function renderCostsFixes(container, data) {
+  const { fixRows, money } = data;
+  const totals = costsTotals(fixRows);
+  const open = fixRows.filter((fix) => !['resolved', 'validated', 'absorbed', 'implemented'].includes(fix.status)).length;
+  const kpis = [
+    dashboardStatCell({ value: String(fixRows.length), label: t('Fixes'), href: '#/fixes' }),
+    dashboardStatCell({ value: String(open), label: t('Fixes abiertos'), href: '#/fixes', accent: open === 0 && fixRows.length > 0 }),
+    ...costsHeadlineKpis(totals, money, { hours: '#/fixes', usage: '#/fixes' }),
+  ];
+  const empty =
+    fixRows.length === 0
+      ? emptyState(
+          t('Sin fixes todavía'),
+          t('Cuando el FIX GATE registre fixes con horas estimadas y telemetría, el tablero aparece acá.'),
+        )
+      : '';
+  container.innerHTML = `
+    ${costsPageHeader(data, 'fixes')}
+    ${costsKpiRow(kpis)}
+    ${empty}
+    ${
+      fixRows.length > 0
+        ? `${costsFixesByTypeCard(fixRows, money)}
+          <div class="costs-grid">
+            ${costsFixesBySeverityCard(fixRows)}
+            ${costsFixesStatusCard(fixRows)}
+          </div>
+          ${costsFixesTokensCard(fixRows)}
+          ${costsSectionCard({
+            title: t('Detalle por fix'),
+            body: costsUnitsTable(
+              fixRows,
+              money,
+              t('{count} fixes. La tabla tiene alto fijo: desplazá dentro de ella.', { count: fixRows.length }),
+            ),
+          })}`
+        : ''
+    }
+  `;
+}
+
+// ─── RTK ────────────────────────────────────────────────────────────────────
+
+async function loadRtkGain() {
+  if (!isLiveHost()) return { unavailable: 'static' };
+  try {
+    const response = await fetch(new URL('__rtk', window.location.href).href, {
+      cache: 'no-store',
+    });
+    if (!response.ok) return { unavailable: 'endpoint' };
+    return await response.json();
+  } catch {
+    return { unavailable: 'endpoint' };
+  }
+}
+
+function rtkDayKey(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+/** Last N days, oldest first, with rtk's daily rows filled in and missing days at zero. */
+function rtkDailySeries(daily, days = 30) {
+  const byDate = new Map(daily.map((row) => [row.date, row]));
+  const out = [];
+  const today = new Date();
+  for (let offset = days - 1; offset >= 0; offset--) {
+    const date = new Date(today);
+    date.setUTCDate(today.getUTCDate() - offset);
+    const key = rtkDayKey(date);
+    const row = byDate.get(key);
+    out.push({
+      date: key,
+      commands: row?.commands ?? 0,
+      input: row?.input_tokens ?? 0,
+      output: row?.output_tokens ?? 0,
+      saved: row?.saved_tokens ?? 0,
+    });
+  }
+  return out;
+}
+
+function rtkShortDay(key) {
+  return key.slice(5).replace('-', '/');
+}
+
+function rtkStatusBadge(gain) {
+  if (!gain.enabled) return badge(t('Apagado'), 'badge--amber');
+  if (!gain.binary) return badge(t('Sin binario'), 'badge--rose');
+  return badge(t('Activo'), 'badge--emerald');
+}
+
+function rtkStatusCard(gain) {
+  const rows = [
+    [t('Estado'), rtkStatusBadge(gain)],
+    [t('Binario'), gain.binary ? `<code>${escapeHtml(gain.binary)}</code> · ${escapeHtml(gain.version ?? '?')}` : `<span style="color:var(--text-faint)">${t('no encontrado')}</span>`],
+    [t('Alcance'), `<code>${escapeHtml(gain.scope ?? '')}</code>`],
+    [t('Detalle por comando'), gain.history_source === 'sqlite' ? t('leído de la base local de rtk') : t('no disponible en este runtime (Node ≥ 22.5 lo habilita)')],
+  ];
+  return costsSectionCard({
+    title: t('rtk en este repo'),
+    subtitle: t(
+      'rtk comprime la salida de los comandos de shell antes de que el agente la lea. Viene activo por defecto con el kit; los hooks de Claude Code y Gemini CLI pasan por <code>sdd/scripts/rtk-hook.mjs</code>, y <code>sdd/tools.json</code> es el interruptor.',
+    ),
+    body: `
+      <dl class="rtk-status">${rows
+        .map(([label, value]) => `<dt>${escapeHtml(label)}</dt><dd>${value}</dd>`)
+        .join('')}</dl>`,
+    hint: `${t('Apagar / prender: <code>pnpm sdd:rtk -- --disable</code> · <code>pnpm sdd:rtk -- --enable</code>, o pedírselo al sdd-steward. Estos números viven en la máquina donde corre <code>sdd:docs</code> (rtk guarda su historial por usuario, no en el repo) y son estimaciones: rtk cuenta bytes ÷ 4, no tokens del proveedor.')} <button type="button" class="pill" data-rtk-refresh style="margin-left:8px;padding:2px 10px;font-size:var(--text-11)">${t('Actualizar')}</button>`,
+  });
+}
+
+function rtkKpis(gain, pricing, money) {
+  const summary = gain.summary ?? {};
+  const saved = summary.total_saved ?? 0;
+  const inputPrice =
+    pricing.model_prices_per_mtok[COSTS_ASSUMED_TIER]?.input ??
+    COSTS_FALLBACK_PRICING.model_prices_per_mtok[COSTS_ASSUMED_TIER].input;
+  const usd = (saved / 1_000_000) * inputPrice;
+  return [
+    dashboardStatCell({ value: costsExactFormat().format(summary.total_commands ?? 0), label: t('Comandos comprimidos'), href: '#/costs/rtk' }),
+    dashboardStatCell({ value: costsTokensFormat().format(summary.total_input ?? 0), label: t('Tokens generados'), href: '#/costs/rtk' }),
+    dashboardStatCell({ value: costsTokensFormat().format(summary.total_output ?? 0), label: t('Tokens leídos por el agente'), href: '#/costs/rtk' }),
+    dashboardStatCell({
+      value: costsTokensFormat().format(saved),
+      label: t('Tokens ahorrados'),
+      href: '#/costs/rtk',
+      accent: saved > 0,
+      sub: summary.avg_savings_pct !== undefined ? t('{pct}% promedio', { pct: Math.round(summary.avg_savings_pct) }) : '',
+    }),
+    dashboardStatCell({
+      value: money.format(usd),
+      label: t('Equivalente aprox.'),
+      href: '#/costs/rtk',
+      accent: usd > 0,
+      sub: t('a tarifa input de {tier}', { tier: COSTS_ASSUMED_TIER }),
+    }),
+  ];
+}
+
+function rtkDailyCard(series) {
+  const points = series.map((day) => ({
+    label: rtkShortDay(day.date),
+    values: [day.output, day.saved],
+    tip: `${day.date} — ${t('{commands} comandos · leídos {read} · ahorrados {saved} ({pct}%)', {
+      commands: costsExactFormat().format(day.commands),
+      read: costsExactFormat().format(day.output),
+      saved: costsExactFormat().format(day.saved),
+      pct: day.input > 0 ? Math.round((day.saved / day.input) * 100) : 0,
+    })}`,
+  }));
+  return costsSectionCard({
+    title: t('Últimos 30 días — leído vs ahorrado'),
+    subtitle: t('Cada columna es la salida completa de los comandos del día: la parte que el agente leyó y la que rtk recortó.'),
+    body: `${vizLegend([
+      { label: t('Leído por el agente'), color: RTK_SERIES.read },
+      { label: t('Ahorrado'), color: RTK_SERIES.saved },
+    ])}${vizColumns({
+      points,
+      series: [
+        { label: t('Leído por el agente'), color: RTK_SERIES.read },
+        { label: t('Ahorrado'), color: RTK_SERIES.saved },
+      ],
+      format: (value) => costsTokensFormat().format(value),
+      xLabelEvery: 5,
+    })}`,
+  });
+}
+
+function rtkCumulativeCard(series) {
+  let running = 0;
+  const points = series.map((day) => {
+    running += day.saved;
+    return {
+      label: rtkShortDay(day.date),
+      value: running,
+      tip: `${day.date} — ${t('acumulado: {saved} tokens ahorrados', { saved: costsExactFormat().format(running) })}`,
+    };
+  });
+  return costsSectionCard({
+    grid: true,
+    title: t('Ahorro acumulado (30 días)'),
+    subtitle: t('Tokens que el agente no tuvo que leer, sumados día a día.'),
+    body: vizLine({ points, color: RTK_SERIES.saved, format: (value) => costsTokensFormat().format(value), width: 400 }),
+  });
+}
+
+function rtkMonthlyCard(monthly) {
+  const points = monthly.slice(-12).map((row) => ({
+    label: row.month,
+    values: [row.output_tokens ?? 0, row.saved_tokens ?? 0],
+    tip: `${row.month} — ${t('{commands} comandos · leídos {read} · ahorrados {saved} ({pct}%)', {
+      commands: costsExactFormat().format(row.commands ?? 0),
+      read: costsExactFormat().format(row.output_tokens ?? 0),
+      saved: costsExactFormat().format(row.saved_tokens ?? 0),
+      pct: Math.round(row.savings_pct ?? 0),
+    })}`,
+  }));
+  return costsSectionCard({
+    grid: true,
+    title: t('Por mes'),
+    subtitle: t('Mismo desglose, agrupado por mes.'),
+    body:
+      points.length === 0
+        ? `<p class="card-hint">${t('Sin datos para graficar todavía.')}</p>`
+        : `${vizLegend([
+            { label: t('Leído por el agente'), color: RTK_SERIES.read },
+            { label: t('Ahorrado'), color: RTK_SERIES.saved },
+          ])}${vizColumns({
+            points,
+            series: [
+              { label: t('Leído por el agente'), color: RTK_SERIES.read },
+              { label: t('Ahorrado'), color: RTK_SERIES.saved },
+            ],
+            format: (value) => costsTokensFormat().format(value),
+            height: 170,
+            width: 400,
+            xLabelEvery: 1,
+          })}`,
+  });
+}
+
+function rtkByCommandCard(byCommand) {
+  if (byCommand.length === 0) return '';
+  const rows = byCommand.map((row) => ({
+    label: row.command,
+    value: row.saved_tokens,
+    valueLabel: `${costsTokensFormat().format(row.saved_tokens)} · ${Math.round(row.savings_pct)}%`,
+    tip: `${row.command} — ${t('{commands} comandos · leídos {read} · ahorrados {saved} ({pct}%)', {
+      commands: costsExactFormat().format(row.commands),
+      read: costsExactFormat().format(row.output_tokens),
+      saved: costsExactFormat().format(row.saved_tokens),
+      pct: Math.round(row.savings_pct),
+    })}`,
+  }));
+  const table = scrollTable({
+    head: `<th>${t('Comando')}</th><th style="text-align:right">${t('Veces')}</th><th style="text-align:right">${t('Generados')}</th><th style="text-align:right">${t('Leídos')}</th><th style="text-align:right">${t('Ahorrados')}</th><th style="text-align:right">%</th><th style="text-align:right">${t('Tiempo')}</th>`,
+    body: byCommand
+      .map(
+        (row) => `
+        <tr>
+          <td><code>${escapeHtml(row.command)}</code></td>
+          <td style="text-align:right">${costsExactFormat().format(row.commands)}</td>
+          <td style="text-align:right">${costsExactFormat().format(row.input_tokens)}</td>
+          <td style="text-align:right">${costsExactFormat().format(row.output_tokens)}</td>
+          <td style="text-align:right">${costsExactFormat().format(row.saved_tokens)}</td>
+          <td style="text-align:right">${Math.round(row.savings_pct)}%</td>
+          <td style="text-align:right">${costsExactFormat().format(row.total_time_ms)} ms</td>
+        </tr>`,
+      )
+      .join(''),
+    rows: byCommand.length,
+    caption: t('{count} familias de comando. La tabla tiene alto fijo: desplazá dentro de ella.', { count: byCommand.length }),
+  });
+  return costsSectionCard({
+    title: t('Ahorro por comando'),
+    subtitle: t('Qué comandos recortan más. Agrupados por familia (<code>git status</code>, <code>pnpm test</code>, …).'),
+    body: `${vizBarList({ rows, color: RTK_SERIES.saved, format: (value) => costsTokensFormat().format(value) })}<div style="height:16px"></div>${table}`,
+  });
+}
+
+function rtkRecentCard(recent) {
+  if (recent.length === 0) return '';
+  const body = recent
+    .map(
+      (row) => `
+      <tr>
+        <td style="color:var(--text-faint)">${escapeHtml(String(row.at ?? '').replace('T', ' ').slice(0, 16))}</td>
+        <td><code>${escapeHtml(row.command)}</code></td>
+        <td style="text-align:right">${costsExactFormat().format(row.input_tokens)}</td>
+        <td style="text-align:right">${costsExactFormat().format(row.output_tokens)}</td>
+        <td style="text-align:right">${costsExactFormat().format(row.saved_tokens)}</td>
+        <td style="text-align:right">${Math.round(row.savings_pct)}%</td>
+      </tr>`,
+    )
+    .join('');
+  return costsSectionCard({
+    title: t('Últimos comandos'),
+    body: scrollTable({
+      head: `<th>${t('Cuándo')}</th><th>${t('Comando')}</th><th style="text-align:right">${t('Generados')}</th><th style="text-align:right">${t('Leídos')}</th><th style="text-align:right">${t('Ahorrados')}</th><th style="text-align:right">%</th>`,
+      body,
+      rows: recent.length,
+      caption: t('Los {count} más recientes en este repo.', { count: recent.length }),
+    }),
+  });
+}
+
+function rtkUnavailable(gain) {
+  if (gain.unavailable === 'static') {
+    return emptyState(
+      t('Solo con el servidor local'),
+      t('La ganancia de rtk se lee de la máquina que corre pnpm sdd:docs; en hosting estático no está disponible.'),
+    );
+  }
+  if (gain.unavailable === 'endpoint') {
+    return emptyState(
+      t('El servidor no respondió'),
+      t('Reiniciá pnpm sdd:docs para tomar la versión nueva del visor.'),
+    );
+  }
+  if (!gain.binary) {
+    return `${rtkStatusCard(gain)}${emptyState(
+      t('rtk no está instalado en esta máquina'),
+      t('Corré pnpm sdd:rtk para instalarlo (descarga el binario oficial con checksum verificado). Si la red lo bloquea: curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh'),
+    )}`;
+  }
+  return null;
+}
+
+async function renderCostsRtk(container, data) {
+  const { pricing, money } = data;
+  const gain = await loadRtkGain();
+  const blocked = rtkUnavailable(gain);
+  if (blocked) {
+    container.innerHTML = `${costsPageHeader(data, 'rtk')}${blocked}`;
+    bindRtkRefresh(container);
+    return;
+  }
+  const series = rtkDailySeries(gain.daily ?? []);
+  const hasData = (gain.summary?.total_commands ?? 0) > 0;
+  container.innerHTML = `
+    ${costsPageHeader(data, 'rtk')}
+    ${costsKpiRow(rtkKpis(gain, pricing, money))}
+    ${rtkStatusCard(gain)}
+    ${
+      hasData
+        ? `${rtkDailyCard(series)}
+           <div class="costs-grid">
+             ${rtkCumulativeCard(series)}
+             ${rtkMonthlyCard(gain.monthly ?? [])}
+           </div>
+           ${rtkByCommandCard(gain.by_command ?? [])}
+           ${rtkRecentCard(gain.recent ?? [])}`
+        : emptyState(
+            t('Todavía sin comandos comprimidos en este repo'),
+            gain.enabled
+              ? t('Apenas un agente corra comandos de shell con el hook activo, el ahorro aparece acá.')
+              : t('rtk está apagado en sdd/tools.json. Prendelo con pnpm sdd:rtk -- --enable.'),
+          )
+    }
+  `;
+  bindRtkRefresh(container);
+}
+
+function bindRtkRefresh(container) {
+  container.querySelector('[data-rtk-refresh]')?.addEventListener('click', () => {
+    liveRefreshActiveView();
+  });
+}
+
+// ─── Page ───────────────────────────────────────────────────────────────────
+
+function costsPageHeader(data, tab) {
+  const { rows, fixRows } = data;
+  return `
     ${pageHeader({
       title: t('Costos'),
       meta:
         fixRows.length > 0
-          ? t('{cycles} ciclos · {fixes} fixes', {
-              cycles: rows.length,
-              fixes: fixRows.length,
-            })
+          ? t('{cycles} ciclos · {fixes} fixes', { cycles: rows.length, fixes: fixRows.length })
           : t('{cycles} ciclos', { cycles: rows.length }),
       subtitle: t(
         'Tokens, tiempos y comparativa de costos del modo agéntico contra la estimación tradicional de las tasks.',
       ),
     })}
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-bottom:20px">${kpis}</div>
-    ${costsComparisonCard(rows, pricing, money)}
-    ${costsProvidersCard(rows, fixRows, pricing, money)}
-    ${costsTokensCard(rows)}
-    ${costsTableCard(rows, money)}
-    ${costsFixesCard(fixRows, money)}
-    ${costsMethodologyCard(pricing, totals.anyAssumed, money)}
-  `;
+    ${costsTabBar(tab)}`;
+}
+
+const COSTS_TAB_RENDERERS = {
+  general: renderCostsGeneral,
+  specs: renderCostsSpecs,
+  fixes: renderCostsFixes,
+  rtk: renderCostsRtk,
+};
+
+async function renderCosts(container, params = []) {
+  const tab = COSTS_TAB_RENDERERS[params[0]] ? params[0] : COSTS_DEFAULT_TAB;
+  const loaded = await loadCostsData();
+  const data = {
+    ...loaded,
+    money: costsMoneyFormatter(loaded.pricing.currency ?? 'USD'),
+  };
+
+  if (tab === 'general' && data.rows.length === 0 && data.fixRows.length === 0) {
+    container.innerHTML = `
+      ${costsPageHeader(data, tab)}
+      ${emptyState(
+        t('Sin ciclos todavía'),
+        t('Cuando el loop SDD complete ciclos con tasks estimadas y telemetría de tokens, el tablero aparece acá. La pestaña RTK ya muestra el ahorro de tokens en comandos.'),
+      )}`;
+    return;
+  }
+
+  await COSTS_TAB_RENDERERS[tab](container, data);
   attachCostsTooltip(container);
 }
 
@@ -7605,7 +9123,7 @@ const VIEWS = {
     icon: 'costs',
     render: renderCosts,
     loading: dashboardLoadingSkeleton,
-    deps: ['specs', 'tasks', 'pricing'],
+    deps: ['specs', 'tasks', 'fixes', 'pricing'],
   },
   specs: {
     label: 'Specs', section: 'SDD', icon: 'file', render: renderSpecs,

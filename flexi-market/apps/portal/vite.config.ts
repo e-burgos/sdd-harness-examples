@@ -7,7 +7,7 @@ export default defineConfig({
   root: resolve(__dirname),
   base: process.env.VITE_BASE_PATH ?? '/',
   plugins: [tailwindcss(), react()],
-  server: { port: 4200, host: 'localhost' },
+  server: { port: Number(process.env['PORTAL_PORT'] ?? process.env['PORT'] ?? 4200), host: 'localhost' },
   build: {
     outDir: resolve(__dirname, '../../dist/apps/portal'),
     emptyOutDir: true,
