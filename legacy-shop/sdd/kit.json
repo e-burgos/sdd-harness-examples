@@ -1,5 +1,5 @@
 {
-  "kit_version": "0.14.0",
+  "kit_version": "0.14.1",
   "installed_at": "2026-09-10",
   "files": {
     "README.md": "c26da06c439552bb298a1e9742128d2ac908271c32fe4e703b43c5163bdaf828",
@@ -59,8 +59,8 @@
     "scripts/rebuild-tasks-index.mjs": "98a2f3bbe3ac135f99f60cb2e36c930ea19d8372dca4556b70a8dd9d7658ced8",
     "scripts/rtk-common.mjs": "a8ea5ab824457fcfec44fc6a5a4bd4a3416fd45759b46b6fb143f374bcb01b0f",
     "scripts/rtk-hook.mjs": "6ebec0ceeaa9e816b00df7608953979e70c5ac2aed9744b4c025a527ad107a66",
-    "scripts/setup-agents.ps1": "839209b7d51e5720d82ab39271be153eb1985d537f4f0a8c5b002f0ed11ae617",
-    "scripts/setup-agents.sh": "acf148262575127f00e47a5c8fbb14a1ede54e3d075433e078d65b27dcfe8719",
+    "scripts/setup-agents.ps1": "c309f3ce9f786a12829ce0fdf3b207d003587abdfdba95b7ae340da550bc7f83",
+    "scripts/setup-agents.sh": "87a21a8da853a2357109d2b7ea72447d81b9f41be0fd7a7db744e36a519fd376",
     "scripts/setup-rtk.mjs": "e4b5cf4d4b07a53af1ea8280b980dc59a9b4ea49aa82fa8075a1237008104bd2",
     "scripts/spec-gate.mjs": "120635ec418c0514de983932e02dcf4b941dd38f886c3ddb1acb289d6feea60f",
     "scripts/validate-sdd.mjs": "aa43ae518d8770f55f878b0d3a80e4452a22d1dad288699f266a7b6f7c616a43",
