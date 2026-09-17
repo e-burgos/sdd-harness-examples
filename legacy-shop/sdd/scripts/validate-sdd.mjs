@@ -11,6 +11,19 @@ import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
+
+/** CRLF -> LF for text content (a NUL byte in the first 8 KB means binary: untouched). */
+function normalizeEol(content) {
+  if (content.subarray(0, 8192).includes(0)) return content;
+  if (!content.includes(0x0d)) return content;
+  const out = Buffer.allocUnsafe(content.length);
+  let j = 0;
+  for (let i = 0; i < content.length; i++) {
+    if (content[i] === 0x0d && content[i + 1] === 0x0a) continue;
+    out[j++] = content[i];
+  }
+  return out.subarray(0, j);
+}
 const SDD = resolve(__dirname, '..');
 const REPO = resolve(SDD, '..');
 
@@ -362,9 +375,11 @@ for (const [file, c] of cycles) {
         `flow: lite created ${c.tables_created.length} table(s) / ${c.endpoints_implemented.length} endpoint(s) — contracts other subprojects consume deserve a full cycle: open the next cycle of this spec as flow: full`,
       );
   }
+  // artifacts[]: paths relative to the cycle directory (`artifacts/x`, what the docs suggest)
+  // or to the repo root; a directory counts. Until v0.15.0 only repo-relative paths resolved.
   for (const art of c.artifacts) {
-    if (!existsSync(join(REPO, art)))
-      fail(file, `artifact does not exist: ${art}`);
+    if (!existsSync(join(cycleDir, art)) && !existsSync(join(REPO, art)))
+      fail(file, `artifact does not exist: ${art} (looked relative to the cycle directory and to the repo root)`);
   }
 }
 
@@ -618,10 +633,36 @@ if (existsSync(join(SDD, 'tools.json'))) {
   validate('tools.json', 'tools.schema.json');
 }
 
+// ---- 13. Workspace invariant promised by init-nx-workspace (TS solution setup only) ----
+// When tsconfig.base.json declares `customConditions`, Nx keys every lib's conditional exports
+// with the root package.json `name`: if they differ, TypeScript resolves to dist instead of src.
+// The kit's own nx-workspace template uses legacy `paths` and has no customConditions, so a
+// repo generated from it is not checked. Warning, not failure: the kit never breaks a repo
+// over a workspace setting it did not write.
+{
+  const tsBase = join(REPO, 'tsconfig.base.json');
+  const rootPkg = join(REPO, 'package.json');
+  if (existsSync(tsBase) && existsSync(rootPkg)) {
+    try {
+      const conditions = JSON.parse(readFileSync(tsBase, 'utf8'))?.compilerOptions?.customConditions;
+      const name = JSON.parse(readFileSync(rootPkg, 'utf8'))?.name;
+      if (Array.isArray(conditions) && typeof name === 'string' && !conditions.includes(name))
+        warn(
+          'tsconfig.base.json',
+          `customConditions [${conditions.join(', ')}] does not include the root package.json name "${name}" — with the TS solution setup Nx keys the libs' conditional exports with that name, so types resolve to dist instead of src (init-nx-workspace invariant)`,
+        );
+    } catch {
+      // JSONC or a file the kit does not own: nothing to check.
+    }
+  }
+}
+
 // ---- Content catalog: schema + freshness vs filesystem (viewer depends on it) ----
 const catalogJson = validate('catalog.json', 'catalog.schema.json');
 if (catalogJson) {
-  const { buildCatalog } = await import(join(__dirname, 'rebuild-catalog.mjs'));
+  // A URL, not a path: Node's ESM loader rejects absolute Windows paths ("C:\..." is read as
+  // protocol "c:" — ERR_UNSUPPORTED_ESM_URL_SCHEME). On POSIX a bare path only worked by accident.
+  const { buildCatalog } = await import(new URL('./rebuild-catalog.mjs', import.meta.url));
   const expected = buildCatalog();
   for (const section of ['agents', 'skills', 'prompts', 'schemas', 'memory']) {
     const have = JSON.stringify(catalogJson[section] ?? []);
@@ -691,7 +732,9 @@ if (globalJson) {
       for (const [rel, hash] of Object.entries(manifest.files ?? {})) {
         const abs = join(SDD, rel);
         if (!existsSync(abs)) continue;
-        const actual = createHash('sha256').update(readFileSync(abs)).digest('hex');
+        // Same rule as the CLI's kit-manifest: CRLF folded to LF for text files, so a Windows
+        // checkout with core.autocrlf=true still matches the hash the kit shipped.
+        const actual = createHash('sha256').update(normalizeEol(readFileSync(abs))).digest('hex');
         if (actual === hash) pristine.add(abs);
       }
     } catch {
