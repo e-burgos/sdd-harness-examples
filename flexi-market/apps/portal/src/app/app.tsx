@@ -1,12 +1,23 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { LucideIcons, ThemeProvider } from '@e-burgos/tucu-ui';
 import { HomePage } from '../pages/HomePage';
+
+const menuItems = [
+  {
+    name: 'Home',
+    path: '/',
+    icon: <LucideIcons.LayoutDashboard />,
+    component: <HomePage />,
+  },
+];
 
 export function App() {
   return (
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider
+      logo={{ name: 'portal' }}
+      layout="admin"
+      brandColor="Blue"
+      menuItems={menuItems}
+      isAuthenticated
+    />
   );
 }

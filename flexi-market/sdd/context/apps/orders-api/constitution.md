@@ -10,7 +10,7 @@
 
 ## 2. Stack tecnológico
 
-- [Framework / librerías principales y versión]
+- Spring Boot 3, Java 21, Maven (hexagonal)
 
 ## 3. Estructura y patrones
 

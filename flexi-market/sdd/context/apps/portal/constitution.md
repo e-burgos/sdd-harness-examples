@@ -10,7 +10,7 @@
 
 ## 2. Stack tecnológico
 
-- [Framework / librerías principales y versión]
+- React + Vite + Tailwind v4, tucu-ui
 
 ## 3. Estructura y patrones
 

@@ -12,7 +12,7 @@
 
 ## 2. Stack tecnológico
 
-- [Framework / librerías principales y versión]
+- Fastify (esbuild)
 
 ## 3. Estructura y patrones
 

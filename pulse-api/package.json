@@ -16,6 +16,7 @@
     "sdd:gate": "node sdd/scripts/spec-gate.mjs",
     "sdd:rtk": "node sdd/scripts/setup-rtk.mjs",
     "sdd:mod": "node sdd/scripts/sdd-mod.mjs",
+    "sdd:tucu": "node sdd/scripts/sdd-tucu.mjs",
     "postinstall": "node -e \"const f='sdd/scripts/setup-rtk.mjs';if(require('fs').existsSync(f)){require('child_process').execFileSync(process.execPath,[f],{stdio:'inherit'})}\""
   },
   "dependencies": {
@@ -25,7 +26,7 @@
     "@types/node": "^22.0.0",
     "tsx": "^4.19.0",
     "typescript": "~6.0.3",
-    "vitest": "^4.1.10",
+    "vitest": "^5.1.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1"
   }
