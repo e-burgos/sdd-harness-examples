@@ -3937,8 +3937,8 @@ packages:
       jsdom:
         optional: true
 
-  watchpack@2.6.3:
-    resolution: {integrity: sha512-s3NZy0QpTY9qGqzc0wtz4qI28z3+5qKbbAec4MV4G9N3CfgZ9wgvQRr0cl2jh/tqkWG1NWHkmVMHZpCamev5Wg==}
+  watchpack@2.6.4:
+    resolution: {integrity: sha512-5H3Tce2GfzWbcr9VnSqyak2whFaONw4BdmI5BDnMXold4qSlCFd64XaMQESRh2vkDKmdUkv6rUo17UvZ9f9nXw==}
     engines: {node: '>=10.13.0'}
 
   wcwidth@1.0.1:
@@ -8173,7 +8173,7 @@ snapshots:
     transitivePeerDependencies:
       - msw
 
-  watchpack@2.6.3:
+  watchpack@2.6.4:
     dependencies:
       graceful-fs: 4.2.11
 
@@ -8208,7 +8208,7 @@ snapshots:
       schema-utils: 4.8.3(webpack@5.105.2(@swc/core@1.15.47(@swc/helpers@0.5.24))(postcss@8.5.32))
       tapable: 2.3.3
       terser-webpack-plugin: 5.6.1(@swc/core@1.15.47(@swc/helpers@0.5.24))(postcss@8.5.32)(webpack@5.105.2(@swc/core@1.15.47(@swc/helpers@0.5.24))(postcss@8.5.32))
-      watchpack: 2.6.3
+      watchpack: 2.6.4
       webpack-sources: 3.7.0
     transitivePeerDependencies:
       - '@minify-html/node'
