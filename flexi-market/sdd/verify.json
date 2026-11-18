@@ -1,0 +1,31 @@
+{
+  "$schema": "./schemas/verify.schema.json",
+  "_description": "Comandos de verificación quick (por task) y full (por bloque) de cada subproyecto, que corre pnpm sdd:verify; es dato del proyecto y el update del kit nunca lo pisa.",
+  "apps/portal": {
+    "quick": [
+      "pnpm nx run-many -t lint test -p portal"
+    ],
+    "full": [
+      "pnpm nx run-many -t lint test build -p portal"
+    ],
+    "full_exclusive": true
+  },
+  "apps/orders-api": {
+    "quick": [
+      "pnpm nx run-many -t lint test -p orders-api"
+    ],
+    "full": [
+      "pnpm nx run-many -t lint test build -p orders-api"
+    ],
+    "full_exclusive": true
+  },
+  "libs/shared-types": {
+    "quick": [
+      "pnpm nx run-many -t lint test -p shared-types"
+    ],
+    "full": [
+      "pnpm nx run-many -t lint test build -p shared-types"
+    ],
+    "full_exclusive": true
+  }
+}

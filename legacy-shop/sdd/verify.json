@@ -1,0 +1,14 @@
+{
+  "$schema": "./schemas/verify.schema.json",
+  "_description": "Comandos de verificación quick (por task) y full (por bloque) de cada subproyecto, que corre pnpm sdd:verify; es dato del proyecto y el update del kit nunca lo pisa.",
+  "apps/legacy-shop": {
+    "quick": [
+      "pnpm run lint",
+      "pnpm run test"
+    ],
+    "full": [
+      "pnpm run lint",
+      "pnpm run test"
+    ]
+  }
+}
